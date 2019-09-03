@@ -1,0 +1,36 @@
+list of contacts with optional filter
+data for each contact needs to be added with the last contacted time and the 
+default contact method
+each contact has picture, name and last contacted time
+
+selecting a contact opens the default contact method, an update button, and an 
+edit button
+
+the update button will reset the last contacted time for this contact (if you've
+spoken face-to-face)
+
+the edit button will allow for setting the default contact method, and will also
+have a link to editing the contact (maybe as an additional fragment below the 
+contact method selection)
+
+
+MainActivity (contact list)
+    ContactListFragment
+        contact_list_view
+        contact_list_item_view
+    ContactViewFragment
+        contact_action_view
+ContactEditActivity
+    ContactEditFragment
+        contact_edit_view
+
+
+Getting contact data
+https://stackoverflow.com/questions/10117049/get-only-email-address-from-contact-list-android
+
+Link to editing contact data
+https://developer.android.com/training/contacts-provider/modify-data
+
+Saving data specific to this app
+(last contact time, preffered contact method)
+https://developer.android.com/training/data-storage/room/index.html
