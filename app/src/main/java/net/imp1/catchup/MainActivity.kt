@@ -2,16 +2,15 @@ package net.imp1.catchup
 
 import android.database.Cursor
 import android.net.Uri
-import android.os.Build
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.provider.ContactsContract
-import android.util.Log
 import android.view.View
 import android.widget.AdapterView
 import android.widget.CursorAdapter
 import android.widget.ListView
-import android.widget.SimpleCursorAdapter
+
+import android.util.Log
 
 private const val CONTACT_ID_INDEX : Int = 0
 private const val CONTACT_KEY_INDEX : Int = 1
@@ -25,12 +24,6 @@ class MainActivity :
     var contactKey : String? = null
     var contactUri : Uri? = null
 
-    private val CONTACT_NAME = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB) {
-        ContactsContract.Contacts.DISPLAY_NAME_PRIMARY
-    } else {
-        ContactsContract.Contacts.DISPLAY_NAME
-    }
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.contact_list)
@@ -42,12 +35,7 @@ class MainActivity :
     }
 
     override fun onItemClick(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
-        val cursor : Cursor? = (parent?.adapter as? CursorAdapter)?.cursor?.apply {
-            moveToPosition(position)
-            contactId = getLong(CONTACT_ID_INDEX)
-            contactKey = getString(CONTACT_KEY_INDEX)
-            contactUri = ContactsContract.Contacts.getLookupUri(contactId, contactKey)
-        }
+
     }
 
     private fun getCatchUpGroupId() : Long? {
