@@ -27,6 +27,8 @@ ContactEditActivity
 
 Getting contact data
 https://stackoverflow.com/questions/10117049/get-only-email-address-from-contact-list-android
+https://stackoverflow.com/questions/4334649/accessing-android-contact-group-names
+https://stackoverflow.com/questions/18604151/getting-contacts-based-on-the-groupid-in-android
 
 Link to editing contact data
 https://developer.android.com/training/contacts-provider/modify-data
@@ -34,3 +36,6 @@ https://developer.android.com/training/contacts-provider/modify-data
 Saving data specific to this app
 (last contact time, preffered contact method)
 https://developer.android.com/training/data-storage/room/index.html
+
+
+
