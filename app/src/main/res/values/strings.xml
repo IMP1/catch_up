@@ -1,3 +1,4 @@
 <resources>
     <string name="app_name">Catch Up</string>
+    <string name="contact_photo_description">%1$s\'s Photo</string>
 </resources>

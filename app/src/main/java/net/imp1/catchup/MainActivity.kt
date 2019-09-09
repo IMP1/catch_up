@@ -6,11 +6,9 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.provider.ContactsContract
 import android.view.View
-import android.widget.AdapterView
-import android.widget.CursorAdapter
-import android.widget.ListView
 
 import android.util.Log
+import android.widget.*
 
 private const val CONTACT_ID_INDEX : Int = 0
 private const val CONTACT_KEY_INDEX : Int = 1
@@ -23,19 +21,21 @@ class MainActivity :
     var contactId : Long = 0
     var contactKey : String? = null
     var contactUri : Uri? = null
+    lateinit var arrayAdapter : ContactListAdapter
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.contact_list)
-        also {
-            contactList = ListView(this)
-            contactList.onItemClickListener = this
-        }
-        getContactIds()
+        val contactDetails = getContactDetails(getContactIds())
+        Log.e("contact_names", contactDetails.joinToString("\n"))
+        arrayAdapter = ContactListAdapter(this, contactDetails)
+        contactList = ListView(this)
+        contactList.onItemClickListener = this
+        contactList.adapter = arrayAdapter
     }
 
     override fun onItemClick(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
-
+        Toast.makeText(applicationContext, "Hello World", Toast.LENGTH_LONG).show()
     }
 
     private fun getCatchUpGroupId() : Long? {
@@ -71,9 +71,6 @@ class MainActivity :
         val groupId = getCatchUpGroupId() ?: return contactIds
         val projection = arrayOf(
             ContactsContract.CommonDataKinds.GroupMembership.CONTACT_ID
-            // CONTACT_NAME
-            //ContactsContract.Contacts.PHOTO_ID,
-            //ContactsContract.CommonDataKinds.Photo.CONTACT_ID
         )
         val selection =
             ContactsContract.CommonDataKinds.GroupMembership.GROUP_ROW_ID + " = ? AND " +
@@ -99,6 +96,13 @@ class MainActivity :
         }
         cursor.close()
         return contactIds
+    }
+
+    private fun getContactDetails(contctIds : List<Long>) : ArrayList<String> {
+        val contactList = ArrayList<String>()
+        contactList.add("Foo")
+        contactList.add("Bar")
+        return contactList
     }
 
 }
