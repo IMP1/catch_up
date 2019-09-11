@@ -17,10 +17,15 @@ class ContactListAdapter(context: Context, resource: Int) :
         this.values = values
     }
 
+    override fun getCount(): Int {
+        return values.size
+    }
+
     @Override
     override fun getView(position: Int, convertView: View?, parent: ViewGroup): View {
         val inflater : LayoutInflater = context.getSystemService(Context.LAYOUT_INFLATER_SERVICE) as LayoutInflater
         val rowView : View = inflater.inflate(R.layout.contact_list_item, parent, false)
+
         val textView : TextView = rowView.findViewById(R.id.label)
         val imageView : ImageView = rowView.findViewById(R.id.icon)
         val contactName = values[position]

@@ -1,37 +1,33 @@
 package net.imp1.catchup
 
-import android.database.Cursor
-import android.net.Uri
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.provider.ContactsContract
 import android.view.View
-
 import android.util.Log
 import android.widget.*
-
-private const val CONTACT_ID_INDEX : Int = 0
-private const val CONTACT_KEY_INDEX : Int = 1
 
 class MainActivity :
     AppCompatActivity(),
     AdapterView.OnItemClickListener {
 
-    lateinit var contactList : ListView
-    var contactId : Long = 0
-    var contactKey : String? = null
-    var contactUri : Uri? = null
-    lateinit var arrayAdapter : ContactListAdapter
+    private lateinit var arrayAdapter : ContactListAdapter
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.contact_list)
+
+        val list : ListView = findViewById(R.id.list)
         val contactDetails = getContactDetails(getContactIds())
-        Log.e("contact_names", contactDetails.joinToString("\n"))
         arrayAdapter = ContactListAdapter(this, contactDetails)
-        contactList = ListView(this)
-        contactList.onItemClickListener = this
-        contactList.adapter = arrayAdapter
+
+        list.onItemClickListener = this
+        list.adapter = arrayAdapter
+    }
+
+    override fun onStop() {
+        super.onStop()
+        // TODO: save data
     }
 
     override fun onItemClick(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
