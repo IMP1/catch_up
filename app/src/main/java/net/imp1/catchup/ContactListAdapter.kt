@@ -14,9 +14,9 @@ import kotlin.collections.ArrayList
 class ContactListAdapter(context: Context, resource: Int) :
     ArrayAdapter<String>(context, resource) {
 
-    private lateinit var values : ArrayList<String>
+    private lateinit var values : ArrayList<ContactDetails>
 
-    constructor(context : Context, values: ArrayList<String>) : this(context, R.layout.contact_list) {
+    constructor(context : Context, values: ArrayList<ContactDetails>) : this(context, R.layout.contact_list) {
         this.values = values
     }
 

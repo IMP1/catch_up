@@ -1,11 +1,13 @@
 package net.imp1.catchup
 
+import android.graphics.drawable.Icon
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.provider.ContactsContract
 import android.view.View
-import android.util.Log
 import android.widget.*
+import java.util.*
+import kotlin.collections.ArrayList
 
 class MainActivity :
     AppCompatActivity(),
@@ -18,7 +20,7 @@ class MainActivity :
         setContentView(R.layout.contact_list)
 
         val list : ListView = findViewById(R.id.list)
-        val contactDetails = getContactDetails(getContactIds())
+        val contactDetails = getContactDetails()
         arrayAdapter = ContactListAdapter(this, contactDetails)
 
         list.onItemClickListener = this
@@ -62,11 +64,13 @@ class MainActivity :
         return null
     }
 
-    private fun getContactIds() : ArrayList<Long> {
-        val contactIds = ArrayList<Long>()
-        val groupId = getCatchUpGroupId() ?: return contactIds
+    private fun getContactDetails() : ArrayList<ContactDetails> {
+        val contactDetails = ArrayList<ContactDetails>()
+        val groupId = getCatchUpGroupId() ?: return contactDetails
         val projection = arrayOf(
-            ContactsContract.CommonDataKinds.GroupMembership.CONTACT_ID
+            ContactsContract.CommonDataKinds.GroupMembership.CONTACT_ID,
+            ContactsContract.Contacts.DISPLAY_NAME,
+            ContactsContract.Contacts.PHOTO_URI
         )
         val selection =
             ContactsContract.CommonDataKinds.GroupMembership.GROUP_ROW_ID + " = ? AND " +
@@ -83,22 +87,21 @@ class MainActivity :
                 args,
                 null
             )
-        } ?: return contactIds
+        } ?: return contactDetails
         if (cursor.moveToFirst()) {
             do {
                 val id = cursor.getLong(cursor.getColumnIndex(ContactsContract.CommonDataKinds.GroupMembership.CONTACT_ID))
-                contactIds.add(id)
+                val name = cursor.getString(cursor.getColumnIndex(ContactsContract.Contacts.DISPLAY_NAME))
+                val icon : Icon? = null
+                val lastContact : Date? = null
+                val contactMethod : String? = null
+                val contact = ContactDetails(id, name, icon, lastContact, contactMethod)
+                contactDetails.add(contact)
             } while (cursor.moveToNext())
         }
         cursor.close()
-        return contactIds
+        return contactDetails
     }
 
-    private fun getContactDetails(contctIds : List<Long>) : ArrayList<String> {
-        val contactList = ArrayList<String>()
-        contactList.add("Foo")
-        contactList.add("Bar")
-        return contactList
-    }
 
 }
