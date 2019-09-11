@@ -1,4 +1,12 @@
 <resources>
     <string name="app_name">Catch Up</string>
     <string name="contact_photo_description">%1$s\'s Photo</string>
+    <string name="just_now">Just now</string>
+    <string name="never">Never</string>
+    <string name="seconds_ago">%1$d seconds ago</string>
+    <string name="minutes_ago">%1$d minutes ago</string>
+    <string name="hours_ago">%1$d hours ago</string>
+    <string name="days_ago">%1$d days ago</string>
+    <string name="weeks_ago">%1$d weeks ago</string>
+    <string name="months_ago">%1$d months ago</string>
 </resources>
