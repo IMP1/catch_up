@@ -94,10 +94,13 @@ class MainActivity :
         return contactIds
     }
 
-    private fun getContactDetails(contctIds : List<Long>) : ArrayList<String> {
-        val contactList = ArrayList<String>()
-        contactList.add("Foo")
-        contactList.add("Bar")
+    private fun getContactDetails(contactIds : List<Long>) : ArrayList<ContactDetails> {
+        Log.d("contact_ids", contactIds.joinToString { it.toString() + "\n" })
+        val contactList = ArrayList<ContactDetails>()
+        contactIds.forEach {
+            val contact = ContactDetails(it, "Foo", null, null, null)
+            contactList.add(contact)
+        }
         return contactList
     }
 

@@ -11,9 +11,9 @@ import android.widget.TextView
 class ContactListAdapter(context: Context, resource: Int) :
     ArrayAdapter<String>(context, resource) {
 
-    private lateinit var values : ArrayList<String>
+    private lateinit var values : ArrayList<ContactDetails>
 
-    constructor(context : Context, values: ArrayList<String>) : this(context, R.layout.contact_list) {
+    constructor(context : Context, values: ArrayList<ContactDetails>) : this(context, R.layout.contact_list) {
         this.values = values
     }
 
@@ -28,10 +28,10 @@ class ContactListAdapter(context: Context, resource: Int) :
 
         val textView : TextView = rowView.findViewById(R.id.label)
         val imageView : ImageView = rowView.findViewById(R.id.icon)
-        val contactName = values[position]
-        textView.text = contactName
+        val contact = values[position]
+        textView.text = contact.name
         imageView.setImageResource(R.drawable.ic_launcher_foreground)
-        imageView.contentDescription = context.getString(R.string.contact_photo_description, contactName)
+        imageView.contentDescription = context.getString(R.string.contact_photo_description, contact.name)
 
         return rowView
     }
