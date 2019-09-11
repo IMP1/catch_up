@@ -14,6 +14,27 @@ have a link to editing the contact (maybe as an additional fragment below the
 contact method selection)
 
 
+# RoadMap
+
+  - [ ] `v0.1.0` : Display names of contacts in catch-up group
+  - [ ] `v0.4.0` : Store last time contacted for contacts
+  - [ ] `v0.2.0` : Display details of contacts
+                      * name
+                      * photo
+                      * time since last contact (in readable form)
+  - [ ] `v0.3.0` : Display actions for contacts
+                      * update last contact time
+                      * contact them in fave way
+                      * contact them in other way
+                      * edit contact
+  - [ ] `v0.5.0` : Store contact methods for contacts (default to call)
+  - [ ] `v0.6.0` : Can manually update last contact time to now
+  - [ ] `v0.7.0` : Can edit contact method for contacts
+  - [ ] `v0.8.0` : Can remove contact from this group (from within this app)
+  - [ ] `v0.9.0` : Can add contact to this group (from within this app)
+  - [ ] `v0.10.0` : Contact method button takes you to relevant app
+
+
 MainActivity (contact list)
     ContactListFragment
         contact_list_view
