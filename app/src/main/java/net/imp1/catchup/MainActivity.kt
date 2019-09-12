@@ -16,6 +16,13 @@ import java.text.SimpleDateFormat
 import java.util.*
 import java.util.Calendar
 import kotlin.collections.ArrayList
+import android.content.pm.PackageManager
+import android.content.pm.PackageInfo
+import android.R.attr.name
+import android.content.Intent
+import android.content.pm.ApplicationInfo
+import android.content.pm.ResolveInfo
+
 
 val CONTACT_INFO_FILENAME = "contacts.json"
 val DATE_FORMATTER = SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.UK)
@@ -44,6 +51,35 @@ class MainActivity :
 
         list.onItemClickListener = this
         list.adapter = arrayAdapter
+
+        // TODO: Debugging to find permissions relevant to communications apps
+        val pm = packageManager
+        val packages = pm.getInstalledApplications(PackageManager.GET_META_DATA)
+        val interestingPermissions = arrayOf(
+            "android.permission.CALL_PHONE",
+            "android.permission.SEND_SMS",
+            "android.permission.WRITE_SMS"
+        )
+
+        for (applicationInfo in packages) {
+            if (applicationInfo.name == null) { continue }
+            try {
+                val packageInfo =
+                    pm.getPackageInfo(applicationInfo.packageName, PackageManager.GET_PERMISSIONS)
+                //Get Permissions
+                val relevantPermissions = packageInfo.requestedPermissions?.filter {
+                    it in interestingPermissions
+                } ?: ArrayList<String>()
+                if (relevantPermissions.isNotEmpty()){
+                    Log.d("test","App: " + applicationInfo.name + " Package: " + applicationInfo.packageName)
+                    for (p in relevantPermissions) {
+                        Log.d(applicationInfo.name, p)
+                    }
+                }
+            } catch (e: Exception) {
+                e.printStackTrace()
+            }
+        }
     }
 
     override fun onStop() {
@@ -97,6 +133,7 @@ class MainActivity :
                     Toast.makeText(applicationContext, e.message, Toast.LENGTH_LONG).show()
                 }
             }
+            // TODO: load contact method and address
         }
     }
 
@@ -106,6 +143,24 @@ class MainActivity :
         contact?.let { con ->
             con.updateLastContacted()
             adapter.notifyDataSetChanged()
+            val protocol = "tel" // TODO: get from data
+            val address = "07411056431"  // TODO: get from data
+            val uri = Uri.parse("$protocol:$address")
+            val action = when (protocol) {
+                "tel" -> Intent.ACTION_DIAL
+                else -> Intent.ACTION_SEND
+            }
+            val intent = Intent(action, uri)
+
+            val activities: List<ResolveInfo> = packageManager.queryIntentActivities(intent, 0)
+            val isIntentSafe: Boolean = activities.isNotEmpty()
+
+            if (isIntentSafe) {
+                startActivity(intent)
+            } else {
+                Toast.makeText(applicationContext, "Couldn't find an app to contact", Toast.LENGTH_LONG).show()
+            }
+
         }
     }
 
@@ -168,7 +223,8 @@ class MainActivity :
                 val iconUri : Uri? = null
                 val lastContact : Date? = null
                 val contactMethod : String? = null
-                val contact = Contact(id, name, iconUri, lastContact, contactMethod)
+                val address : String? = null
+                val contact = Contact(id, name, iconUri, lastContact, contactMethod, address)
                 contactDetails.add(contact)
             } while (cursor.moveToNext())
         }
