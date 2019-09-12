@@ -40,6 +40,11 @@ class MainActivity :
             Toast.makeText(applicationContext, e.message, Toast.LENGTH_LONG).show()
         }
 
+        // TODO: order the contacts
+        contacts.sortBy {
+            it.lastContacted ?: Date(0L)
+        }
+
         val list : ListView = findViewById(R.id.list)
         contactAdapter = ContactListAdapter(this, contacts)
 
@@ -128,6 +133,15 @@ class MainActivity :
             }
             // TODO: load contact method and address
             // TODO: give all contacts a contactMethod and address
+        }
+    }
+
+    fun reset(view : View) {
+        val position = view.tag as Int
+        val contact = contactAdapter.getItem(position)
+        contact?.let { con ->
+            con.updateLastContacted()
+            contactAdapter.notifyDataSetChanged()
         }
     }
 
