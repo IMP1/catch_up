@@ -12,16 +12,20 @@ import java.util.concurrent.TimeUnit
 import kotlin.collections.ArrayList
 
 class ContactListAdapter(context: Context, resource: Int) :
-    ArrayAdapter<String>(context, resource) {
+    ArrayAdapter<Contact>(context, resource) {
 
-    private lateinit var values : ArrayList<ContactDetails>
+    private lateinit var values : ArrayList<Contact>
 
-    constructor(context : Context, values: ArrayList<ContactDetails>) : this(context, R.layout.contact_list) {
+    constructor(context : Context, values: ArrayList<Contact>) : this(context, R.layout.contact_list) {
         this.values = values
     }
 
     override fun getCount(): Int {
         return values.size
+    }
+
+    override fun getItem(position: Int): Contact? {
+        return values[position]
     }
 
     private fun getLastContactedTime(datetime: Date?) : String {
