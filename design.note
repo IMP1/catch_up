@@ -31,7 +31,14 @@ Integration with comms apps
   * Email: https://stackoverflow.com/questions/8701634/send-email-intent
   * Phone: https://stackoverflow.com/questions/4275678/how-to-make-a-phone-call-using-intent-in-android
   * Messenger: https://stackoverflow.com/questions/26101675/share-a-text-with-facebook-messenger
-  * Signal: ???
+  * Telegram: https://stackoverflow.com/questions/21627167/how-to-send-a-intent-with-telegram
+  * Signal: ??? modify telegram technique
+
+Get row of button in list
+https://stackoverflow.com/questions/20541821/get-listview-item-position-on-button-click
+
+Request permissions
+https://developer.android.com/training/permissions/requesting
 
 # RoadMap
 
