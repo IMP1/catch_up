@@ -13,6 +13,25 @@ the edit button will allow for setting the default contact method, and will also
 have a link to editing the contact (maybe as an additional fragment below the 
 contact method selection)
 
+# Useful References
+
+Sending a user to another app (for texting/calling/etc)
+https://developer.android.com/training/basics/intents/sending
+
+For setting the contact method preference for a user?
+https://developer.android.com/training/basics/intents/sending#AppChooser
+
+Find apps with permissions
+https://stackoverflow.com/questions/7937794/how-to-get-installed-applications-permissions
+
+Integration with comms apps
+
+  * Whatsapp: https://faq.whatsapp.com/en/android/28000012
+  * SMS: https://stackoverflow.com/questions/9798657/send-a-sms-via-intent
+  * Email: https://stackoverflow.com/questions/8701634/send-email-intent
+  * Phone: https://stackoverflow.com/questions/4275678/how-to-make-a-phone-call-using-intent-in-android
+  * Messenger: https://stackoverflow.com/questions/26101675/share-a-text-with-facebook-messenger
+  * Signal: ???
 
 # RoadMap
 
