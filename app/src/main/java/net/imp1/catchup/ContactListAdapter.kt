@@ -60,20 +60,36 @@ class ContactListAdapter(context: Context, resource: Int) :
 
     @Override
     override fun getView(position: Int, convertView: View?, parent: ViewGroup): View {
-        val inflater : LayoutInflater = context.getSystemService(Context.LAYOUT_INFLATER_SERVICE) as LayoutInflater
-        val rowView : View = inflater.inflate(R.layout.contact_list_item, parent, false)
+        val inflater = context.getSystemService(Context.LAYOUT_INFLATER_SERVICE) as LayoutInflater
+        val rowView = inflater.inflate(R.layout.contact_list_item, parent, false)
         val contact = values[position]
         val contactNameTextView : TextView = rowView.findViewById(R.id.contact_name)
         val contactImageView : ImageView = rowView.findViewById(R.id.contact_image)
         val contactTimeTextView : TextView = rowView.findViewById(R.id.last_contacted)
         val catchUpButton : Button = rowView.findViewById(R.id.catch_up_btn)
+        val resetButton : Button = rowView.findViewById(R.id.reset_btn)
+        val editButton : Button = rowView.findViewById(R.id.edit_btn)
 
         contactNameTextView.text = contact.name
         contactTimeTextView.text = getLastContactedTime(contact.lastContacted)
-        contactImageView.setImageResource(R.drawable.ic_person_black)
+        contactImageView.setImageResource(R.drawable.ic_person_black_128dp)
         contactImageView.contentDescription = context.getString(R.string.contact_photo_description, contact.name)
-        catchUpButton.setCompoundDrawablesRelativeWithIntrinsicBounds(R.drawable.ic_call_black, 0, 0, 0)
-        catchUpButton.tag = position
+
+        catchUpButton.let {
+            it.setCompoundDrawablesRelativeWithIntrinsicBounds(
+                R.drawable.ic_phone_black_24dp, 0, 0, 0)
+            it.tag = position
+        }
+        resetButton.let {
+            it.setCompoundDrawablesRelativeWithIntrinsicBounds(
+                R.drawable.ic_update_black_24dp, 0, 0, 0)
+            it.tag = position
+        }
+        editButton.let {
+            it.setCompoundDrawablesRelativeWithIntrinsicBounds(
+                R.drawable.ic_edit_black_24dp, 0, 0, 0)
+            it.tag = position
+        }
 
         return rowView
     }
