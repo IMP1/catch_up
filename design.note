@@ -17,8 +17,8 @@ contact method selection)
 # RoadMap
 
   - [X] `v0.1.0` : Display names of contacts in catch-up group
-  - [ ] `v0.2.0` : Store last time contacted for contacts
-  - [ ] `v0.3.0` : Display details of contacts
+  - [X] `v0.2.0` : Store last time contacted for contacts
+  - [X] `v0.3.0` : Display details of contacts
                       * name
                       * photo
                       * time since last contact (in readable form)
