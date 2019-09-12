@@ -8,7 +8,8 @@ data class Contact (
     var name: String,
     var icon_uri: Uri?,
     var lastContacted: Date?,
-    var contactMethod: String?) {
+    var contactMethod: String?,
+    var address: String?) {
 
     fun updateLastContacted(date : Date) {
         lastContacted = date
