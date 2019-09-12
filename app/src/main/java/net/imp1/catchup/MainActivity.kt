@@ -10,28 +10,22 @@ import android.widget.*
 import org.json.JSONArray
 import org.json.JSONObject
 import java.io.FileNotFoundException
-import java.text.DateFormat
 import java.text.ParseException
 import java.text.SimpleDateFormat
 import java.util.*
-import java.util.Calendar
 import kotlin.collections.ArrayList
 import android.content.pm.PackageManager
-import android.content.pm.PackageInfo
-import android.R.attr.name
 import android.content.Intent
-import android.content.pm.ApplicationInfo
 import android.content.pm.ResolveInfo
 
 
-val CONTACT_INFO_FILENAME = "contacts.json"
+const val CONTACT_INFO_FILENAME = "contacts.json"
 val DATE_FORMATTER = SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.UK)
 
 class MainActivity :
-    AppCompatActivity(),
-    AdapterView.OnItemClickListener {
+    AppCompatActivity() {
 
-    private lateinit var arrayAdapter : ContactListAdapter
+    private lateinit var contactAdapter : ContactListAdapter
     private lateinit var contacts : ArrayList<Contact>
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -47,10 +41,9 @@ class MainActivity :
         }
 
         val list : ListView = findViewById(R.id.list)
-        arrayAdapter = ContactListAdapter(this, contacts)
+        contactAdapter = ContactListAdapter(this, contacts)
 
-        list.onItemClickListener = this
-        list.adapter = arrayAdapter
+        list.adapter = contactAdapter
 
         // TODO: Debugging to find permissions relevant to communications apps
         val pm = packageManager
@@ -134,17 +127,18 @@ class MainActivity :
                 }
             }
             // TODO: load contact method and address
+            // TODO: give all contacts a contactMethod and address
         }
     }
 
-    override fun onItemClick(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
-        val adapter = parent?.adapter as ContactListAdapter
-        val contact = adapter.getItem(position)
+    fun catchUp(view : View) {
+        val position = view.tag as Int
+        val contact = contactAdapter.getItem(position)
         contact?.let { con ->
             con.updateLastContacted()
-            adapter.notifyDataSetChanged()
-            val protocol = "tel" // TODO: get from data
-            val address = "07411056431"  // TODO: get from data
+            contactAdapter.notifyDataSetChanged()
+            val protocol = con.contactMethod ?: "tel" // TODO: remove when this can't be null
+            val address = con.address ?: "07411056431" // TODO: remove when this can't be null
             val uri = Uri.parse("$protocol:$address")
             val action = when (protocol) {
                 "tel" -> Intent.ACTION_DIAL
@@ -158,9 +152,10 @@ class MainActivity :
             if (isIntentSafe) {
                 startActivity(intent)
             } else {
-                Toast.makeText(applicationContext, "Couldn't find an app to contact", Toast.LENGTH_LONG).show()
+                val name = con.name
+                val message = "Couldn't find an app to use to catch up with $name"
+                Toast.makeText(applicationContext, message, Toast.LENGTH_LONG).show()
             }
-
         }
     }
 
