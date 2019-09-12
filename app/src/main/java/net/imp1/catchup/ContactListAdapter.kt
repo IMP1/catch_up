@@ -5,6 +5,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ArrayAdapter
+import android.widget.Button
 import android.widget.ImageView
 import android.widget.TextView
 import java.util.*
@@ -65,11 +66,14 @@ class ContactListAdapter(context: Context, resource: Int) :
         val contactNameTextView : TextView = rowView.findViewById(R.id.contact_name)
         val contactImageView : ImageView = rowView.findViewById(R.id.contact_image)
         val contactTimeTextView : TextView = rowView.findViewById(R.id.last_contacted)
+        val catchUpButton : Button = rowView.findViewById(R.id.catch_up_btn)
 
         contactNameTextView.text = contact.name
         contactTimeTextView.text = getLastContactedTime(contact.lastContacted)
         contactImageView.setImageResource(R.drawable.ic_launcher_foreground)
         contactImageView.contentDescription = context.getString(R.string.contact_photo_description, contact.name)
+        catchUpButton.setCompoundDrawablesRelativeWithIntrinsicBounds(android.R.drawable.ic_menu_call, 0, 0, 0)
+        catchUpButton.tag = position
 
         return rowView
     }
