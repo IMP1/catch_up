@@ -70,9 +70,9 @@ class ContactListAdapter(context: Context, resource: Int) :
 
         contactNameTextView.text = contact.name
         contactTimeTextView.text = getLastContactedTime(contact.lastContacted)
-        contactImageView.setImageResource(R.drawable.ic_launcher_foreground)
+        contactImageView.setImageResource(R.drawable.ic_person_black)
         contactImageView.contentDescription = context.getString(R.string.contact_photo_description, contact.name)
-        catchUpButton.setCompoundDrawablesRelativeWithIntrinsicBounds(android.R.drawable.ic_menu_call, 0, 0, 0)
+        catchUpButton.setCompoundDrawablesRelativeWithIntrinsicBounds(R.drawable.ic_call_black, 0, 0, 0)
         catchUpButton.tag = position
 
         return rowView
