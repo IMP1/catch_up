@@ -101,14 +101,11 @@ class MainActivity :
     }
 
     override fun onItemClick(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
-        parent?.let {
-            val contact = it.adapter.getItem(position) as Contact?
-            contact?.let { con ->
-                con.lastContacted = Calendar.getInstance().time
-                val message = "Updating " + con.name
-                Toast.makeText(applicationContext, message, Toast.LENGTH_LONG).show()
-                Log.e("contact_time", con.lastContacted.toString())
-            }
+        val adapter = parent?.adapter as ContactListAdapter
+        val contact = adapter.getItem(position)
+        contact?.let { con ->
+            con.updateLastContacted()
+            adapter.notifyDataSetChanged()
         }
     }
 
