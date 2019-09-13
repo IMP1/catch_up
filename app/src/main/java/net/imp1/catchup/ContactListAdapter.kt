@@ -72,7 +72,11 @@ class ContactListAdapter(context: Context, resource: Int) :
 
         contactNameTextView.text = contact.name
         contactTimeTextView.text = getLastContactedTime(contact.lastContacted)
-        contactImageView.setImageResource(R.drawable.ic_person_black_128dp)
+        if (contact.photo == null) {
+            contactImageView.setImageResource(R.drawable.ic_person_black_128dp)
+        } else {
+            contactImageView.setImageBitmap(contact.photo)
+        }
         contactImageView.contentDescription = context.getString(R.string.contact_photo_description, contact.name)
 
         catchUpButton.let {
