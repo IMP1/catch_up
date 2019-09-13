@@ -1,5 +1,6 @@
 package net.imp1.catchup
 
+import android.Manifest
 import android.net.Uri
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
@@ -17,9 +18,12 @@ import kotlin.collections.ArrayList
 import android.content.pm.PackageManager
 import android.content.Intent
 import android.content.pm.ResolveInfo
+import androidx.core.app.ActivityCompat
+import androidx.core.content.ContextCompat
 
 
 const val CONTACT_INFO_FILENAME = "contacts.json"
+const val MY_PERMISSIONS_REQUEST_READ_CONTACTS = 1
 val DATE_FORMATTER = SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.UK)
 
 class MainActivity :
@@ -28,16 +32,44 @@ class MainActivity :
     private lateinit var contactAdapter : ContactListAdapter
     private lateinit var contacts : ArrayList<Contact>
 
+    override fun onRequestPermissionsResult(requestCode: Int,
+                                            permissions: Array<String>, grantResults: IntArray) {
+        when (requestCode) {
+            MY_PERMISSIONS_REQUEST_READ_CONTACTS -> {
+                if ((grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED)) {
+                    setup()
+                } else {
+                    finishAffinity()
+                }
+                return
+            }
+            else -> {
+                // Ignore all other requests.
+            }
+        }
+    }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.contact_list)
 
+        if (ContextCompat.checkSelfPermission(this, Manifest.permission.READ_CONTACTS)
+            != PackageManager.PERMISSION_GRANTED) {
+            ActivityCompat.requestPermissions(this,
+                arrayOf(Manifest.permission.READ_CONTACTS),
+                MY_PERMISSIONS_REQUEST_READ_CONTACTS)
+        } else {
+            setup()
+        }
+    }
+
+    private fun setup() {
         contacts = getContactDetails()
 
         try {
             loadContactDetails()
         } catch (e : FileNotFoundException ) {
-            Toast.makeText(applicationContext, e.message, Toast.LENGTH_LONG).show()
+            setupDefaultContactDetails()
         }
 
         // TODO: order the contacts
@@ -134,6 +166,10 @@ class MainActivity :
             // TODO: load contact method and address
             // TODO: give all contacts a contactMethod and address
         }
+    }
+
+    private fun setupDefaultContactDetails() {
+
     }
 
     fun reset(view : View) {
