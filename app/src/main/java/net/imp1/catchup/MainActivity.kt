@@ -1,6 +1,7 @@
 package net.imp1.catchup
 
 import android.Manifest
+import android.content.ContentUris
 import android.net.Uri
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
@@ -18,8 +19,11 @@ import kotlin.collections.ArrayList
 import android.content.pm.PackageManager
 import android.content.Intent
 import android.content.pm.ResolveInfo
+import android.graphics.Bitmap
+import android.graphics.BitmapFactory
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
+import java.io.IOException
 
 
 const val CONTACT_INFO_FILENAME = "contacts.json"
@@ -67,9 +71,9 @@ class MainActivity :
         contacts = getContactDetails()
 
         try {
-            loadContactDetails()
+            loadCatchUpContactDetails()
         } catch (e : FileNotFoundException ) {
-            setupDefaultContactDetails()
+            setupDefaultCatchUpContactDetails()
         }
 
         // TODO: order the contacts
@@ -114,13 +118,12 @@ class MainActivity :
 
     override fun onStop() {
         super.onStop()
-
-        saveContactDetails()
+        saveCatchUpContactDetails()
     }
 
-    private fun saveContactDetails() {
+    private fun saveCatchUpContactDetails() {
         val list = JSONArray()
-        contacts.forEach {contact ->
+        contacts.forEach { contact ->
             val obj = JSONObject()
             var lastContactString : String? = null
             contact.lastContacted?.let {
@@ -141,7 +144,7 @@ class MainActivity :
     }
 
     @Throws(FileNotFoundException::class)
-    private fun loadContactDetails() {
+    private fun loadCatchUpContactDetails() {
         var jsonString = ""
         openFileInput(CONTACT_INFO_FILENAME)?.use {
             val buffer = ByteArray(it.available())
@@ -168,7 +171,7 @@ class MainActivity :
         }
     }
 
-    private fun setupDefaultContactDetails() {
+    private fun setupDefaultCatchUpContactDetails() {
 
     }
 
@@ -265,11 +268,19 @@ class MainActivity :
             do {
                 val id = cursor.getLong(cursor.getColumnIndex(ContactsContract.CommonDataKinds.GroupMembership.CONTACT_ID))
                 val name = cursor.getString(cursor.getColumnIndex(ContactsContract.Contacts.DISPLAY_NAME))
-                val iconUri : Uri? = null
+                var photo : Bitmap? = null
+                try {
+                    val stream = ContactsContract.Contacts.openContactPhotoInputStream(contentResolver,
+                        ContentUris.withAppendedId(ContactsContract.Contacts.CONTENT_URI, id))
+                    stream?.let {
+                        photo = BitmapFactory.decodeStream(it)
+                        stream.close()
+                    }
+                } catch (e : IOException) {}
                 val lastContact : Date? = null
                 val contactMethod : String? = null
                 val address : String? = null
-                val contact = Contact(id, name, iconUri, lastContact, contactMethod, address)
+                val contact = Contact(id, name, photo, lastContact, contactMethod, address)
                 contactDetails.add(contact)
             } while (cursor.moveToNext())
         }
