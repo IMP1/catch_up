@@ -91,6 +91,7 @@ class MainActivity :
         contactAdapter = ContactListAdapter(this, contacts)
 
         list.adapter = contactAdapter
+        contactAdapter.notifyDataSetChanged()
 
         // TODO: Debugging to find permissions relevant to communications apps
         val pm = packageManager
@@ -181,12 +182,20 @@ class MainActivity :
 
     }
 
+    private fun refreshList() {
+        contacts.sortBy {
+            it.lastContacted ?: Date(0L)
+        }
+        contactAdapter.notifyDataSetChanged()
+    }
+
     fun reset(view : View) {
         val position = view.tag as Int
         val contact = contactAdapter.getItem(position)
         contact?.let { con ->
             con.updateLastContacted()
             contactAdapter.notifyDataSetChanged()
+            refreshList()
         }
     }
 
@@ -210,6 +219,7 @@ class MainActivity :
 
             if (isIntentSafe) {
                 startActivity(intent)
+                refreshList()
             } else {
                 val name = con.name
                 val message = "Couldn't find an app to use to catch up with $name"
