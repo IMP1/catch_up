@@ -11,9 +11,11 @@
 
     <de.hdodenhof.circleimageview.CircleImageView
         android:id="@+id/contact_image"
-        android:layout_width="80dp"
-        android:layout_height="80dp"
+        android:layout_width="48dp"
+        android:layout_height="48dp"
         android:layout_gravity="center_vertical"
+        android:layout_marginLeft="8dp"
+        android:layout_marginRight="8dp"
         android:contentDescription="@string/contact_photo_description" />
 
     <LinearLayout
@@ -23,21 +25,15 @@
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="32dp"
-            android:layout_marginTop="8dp"
+            android:layout_height="wrap_content"
             android:orientation="horizontal">
 
             <TextView
                 android:id="@+id/contact_name"
-                android:layout_width="200dp"
+                android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:textSize="18sp"
                 android:textStyle="bold" />
-
-            <TextView
-                android:id="@+id/last_contacted"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent" />
 
         </LinearLayout>
 
@@ -45,41 +41,63 @@
             style="?android:attr/buttonBarStyle"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="8dp"
-            android:gravity="right"
-            android:orientation="horizontal"
-            android:paddingLeft="8dp"
-            android:paddingRight="8dp">
+            android:gravity="end"
+            android:orientation="horizontal">
 
-            <Button
-                android:id="@+id/catch_up_btn"
-                style="?android:attr/buttonBarButtonStyle"
-                android:layout_width="32dp"
-                android:layout_height="32dp"
-                android:layout_marginLeft="8dp"
-                android:layout_marginRight="8dp"
-                android:clickable="true"
-                android:focusable="true"
-                android:onClick="catchUp" />
+            <TextView
+                android:id="@+id/last_contacted"
+                android:layout_width="100dp"
+                android:layout_height="match_parent" />
 
-            <Button
-                android:id="@+id/reset_btn"
-                style="?android:attr/buttonBarButtonStyle"
-                android:layout_width="32dp"
-                android:layout_height="32dp"
-                android:layout_marginLeft="8dp"
-                android:layout_marginRight="8dp"
-                android:clickable="true"
-                android:focusable="true"
-                android:onClick="reset" />
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:gravity="end"
+                android:orientation="horizontal"
+                android:paddingStart="8dp"
+                android:paddingEnd="8dp">
 
-            <Button
-                android:id="@+id/edit_btn"
-                style="?android:attr/buttonBarButtonStyle"
-                android:layout_width="32dp"
-                android:layout_height="32dp"
-                android:layout_marginLeft="8dp"
-                android:layout_marginRight="8dp" />
+                <Button
+                    android:id="@+id/catch_up_btn"
+                    style="?android:attr/buttonBarButtonStyle"
+                    android:layout_width="32dp"
+                    android:layout_height="32dp"
+                    android:clickable="true"
+                    android:focusable="true"
+                    android:foregroundGravity="center"
+                    android:gravity="center_horizontal|center_vertical"
+                    android:onClick="catchUp"
+                    android:paddingStart="8dp"
+                    android:paddingTop="4dp"
+                    android:paddingEnd="8dp"
+                    android:paddingBottom="4dp" />
+
+                <Button
+                    android:id="@+id/reset_btn"
+                    style="?android:attr/buttonBarButtonStyle"
+                    android:layout_width="32dp"
+                    android:layout_height="32dp"
+                    android:clickable="true"
+                    android:focusable="true"
+                    android:gravity="center_horizontal|center_vertical"
+                    android:onClick="reset"
+                    android:paddingStart="8dp"
+                    android:paddingTop="4dp"
+                    android:paddingEnd="8dp"
+                    android:paddingBottom="4dp" />
+
+                <Button
+                    android:id="@+id/more_btn"
+                    style="?android:attr/buttonBarButtonStyle"
+                    android:layout_width="32dp"
+                    android:layout_height="32dp"
+                    android:gravity="center_horizontal|center_vertical"
+                    android:paddingStart="8dp"
+                    android:paddingTop="4dp"
+                    android:paddingEnd="8dp"
+                    android:paddingBottom="4dp" />
+
+            </LinearLayout>
 
         </LinearLayout>
 

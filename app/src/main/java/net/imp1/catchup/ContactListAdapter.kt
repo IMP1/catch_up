@@ -68,7 +68,7 @@ class ContactListAdapter(context: Context, resource: Int) :
         val contactTimeTextView : TextView = rowView.findViewById(R.id.last_contacted)
         val catchUpButton : Button = rowView.findViewById(R.id.catch_up_btn)
         val resetButton : Button = rowView.findViewById(R.id.reset_btn)
-        val editButton : Button = rowView.findViewById(R.id.edit_btn)
+        val moreButton : Button = rowView.findViewById(R.id.more_btn)
 
         contactNameTextView.text = contact.name
         contactTimeTextView.text = getLastContactedTime(contact.lastContacted)
@@ -89,9 +89,9 @@ class ContactListAdapter(context: Context, resource: Int) :
                 R.drawable.ic_update_black_24dp, 0, 0, 0)
             it.tag = position
         }
-        editButton.let {
+        moreButton.let {
             it.setCompoundDrawablesRelativeWithIntrinsicBounds(
-                R.drawable.ic_edit_black_24dp, 0, 0, 0)
+                R.drawable.ic_more_vert_black_24dp, 0, 0, 0)
             it.tag = position
         }
 
