@@ -1,5 +1,9 @@
+<!DOCTYPE resources [
+    <!ENTITY appname "Catch Up">
+]>
+
 <resources>
-    <string name="app_name">Catch Up</string>
+    <string name="app_name">&appname;</string>
     <string name="contact_photo_description">%1$s\'s Photo</string>
     <string name="just_now">Just now</string>
     <string name="never">Never</string>
@@ -9,4 +13,7 @@
     <string name="days_ago">%1$d days ago</string>
     <string name="weeks_ago">%1$d weeks ago</string>
     <string name="months_ago">%1$d months ago</string>
+    <string name="add_contact">Add Contact</string>
+    <string name="set_group">Set Contact Group</string>
+    <string name="about">About &appname;</string>
 </resources>
