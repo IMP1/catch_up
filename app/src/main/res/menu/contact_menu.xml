@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content" >
+    <item
+        android:id="@+id/action_change_contact_method"
+        android:icon="@drawable/ic_chat_black_24dp"
+        android:title="@string/edit_contact_method"
+        app:showAsAction="always" />
+    <item
+        android:id="@+id/action_remove_contact"
+        android:icon="@drawable/ic_delete_black_24dp"
+        android:title="@string/remove_contact"
+        app:showAsAction="always" />
+    <item
+        android:id="@+id/action_change_last_contact"
+        android:icon="@drawable/ic_access_time_black_24dp"
+        android:title="@string/edit_last_contact"
+        app:showAsAction="always" />
+</menu>

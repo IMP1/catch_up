@@ -1,6 +1,4 @@
-<!DOCTYPE resources [
-    <!ENTITY appname "Catch Up">
-]>
+<!DOCTYPE resources [<!ENTITY appname "Catch Up">]>
 
 <resources>
     <string name="app_name">&appname;</string>
@@ -16,4 +14,8 @@
     <string name="add_contact">Add Contact</string>
     <string name="set_group">Set Contact Group</string>
     <string name="about">About &appname;</string>
+    <string name="remove_contact">Remove from Catch Up</string>
+    <string name="edit_contact_method">Edit Contact Method</string>
+    <string name="edit_last_contact">Change Last Contact Time</string>
+
 </resources>

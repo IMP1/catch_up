@@ -22,6 +22,7 @@ import android.content.pm.ResolveInfo
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.view.Menu
+import android.view.MenuItem
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import java.io.IOException
@@ -32,7 +33,8 @@ const val MY_PERMISSIONS_REQUEST_READ_CONTACTS = 1
 val DATE_FORMATTER = SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.UK)
 
 class MainActivity :
-    AppCompatActivity() {
+    AppCompatActivity(),
+    PopupMenu.OnMenuItemClickListener {
 
     private lateinit var contactAdapter : ContactListAdapter
     private lateinit var contacts : ArrayList<Contact>
@@ -198,6 +200,31 @@ class MainActivity :
                 }
             }
         }
+    }
+
+    fun moreActions(view: View) {
+        val position = view.tag as Int
+        val popup = PopupMenu(this, view)
+        val inflater = popup.menuInflater
+        popup.setOnMenuItemClickListener(this)
+        inflater.inflate(R.menu.contact_menu, popup.menu)
+        popup.show()
+    }
+
+    override fun onMenuItemClick(item : MenuItem) : Boolean {
+        when (item.itemId) {
+            R.id.action_change_contact_method -> {
+                // TODO: A fragment / overlay view
+            }
+            R.id.action_change_last_contact -> {
+                // TODO: date and time picker overlay / fragment
+            }
+            R.id.action_remove_contact -> {
+                // TODO: remove contact from group
+                // TODO: add toast with undo button
+            }
+        }
+        return true
     }
 
     private fun refreshList() {
