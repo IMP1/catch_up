@@ -77,9 +77,10 @@ class MainActivity :
         contacts = getContactDetails()
 
         // For a hard reset, uncomment this out
-//        try {
-//            deleteFile(CONTACT_INFO_FILENAME)
-//        } catch (e : FileNotFoundException ) {}
+        // TODO: remove this when all is working
+        try {
+            deleteFile(CONTACT_INFO_FILENAME)
+        } catch (e : FileNotFoundException ) {}
 
         try {
             loadCatchUpContactDetails()
@@ -222,14 +223,36 @@ class MainActivity :
         contact?.let { con ->
             con.updateLastContacted()
             contactAdapter.notifyDataSetChanged()
-            val protocol = con.contactMethod ?: "tel" // TODO: remove when this can't be null
-            val address = con.address ?: "07411056431" // TODO: remove when this can't be null
+            val protocol = when(con.contactMethod) {
+                "tel" -> "tel"
+                "sms" -> "sms"
+                "email" -> "mailto"
+                "whatsapp" -> "smsto"
+                "signal" -> "smsto"
+                // TODO: add telegram to list
+                // TODO: add skype to list
+                // TODO: split whatsapp (and others) into text and call
+                else -> "tel"
+            }
+            val address = con.address!!
             val uri = Uri.parse("$protocol:$address")
-            val action = when (protocol) {
+            val action = when (con.contactMethod) {
                 "tel" -> Intent.ACTION_DIAL
+                "sms" -> Intent.ACTION_VIEW
+                "email" -> Intent.ACTION_SENDTO
+                "whatsapp" -> Intent.ACTION_SENDTO
+                "signal" -> Intent.ACTION_SENDTO
                 else -> Intent.ACTION_SEND
             }
+            val packageHint = when(con.contactMethod) {
+                "whatsapp" -> "com.whatsapp"
+                "signal" -> "org.thoughtcrime.securesms"
+                else -> null
+            }
+
             val intent = Intent(action, uri)
+
+            packageHint?.let { intent.setPackage(it) }
 
             val activities: List<ResolveInfo> = packageManager.queryIntentActivities(intent, 0)
             val isIntentSafe: Boolean = activities.isNotEmpty()
@@ -241,6 +264,9 @@ class MainActivity :
                 val name = con.name
                 val message = "Couldn't find an app to use to catch up with $name"
                 Toast.makeText(applicationContext, message, Toast.LENGTH_LONG).show()
+                Log.e("contact", con.name)
+                Log.e("method", uri.toString())
+                Log.e("packageHint", packageHint.toString())
             }
         }
     }
