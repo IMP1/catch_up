@@ -33,11 +33,12 @@ const val MY_PERMISSIONS_REQUEST_READ_CONTACTS = 1
 val DATE_FORMATTER = SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.UK)
 
 class MainActivity :
-    AppCompatActivity(),
-    PopupMenu.OnMenuItemClickListener {
+    AppCompatActivity() {
 
     private lateinit var contactAdapter : ContactListAdapter
     private lateinit var contacts : ArrayList<Contact>
+
+    var catchupGroup = "catch-up"
 
     override fun onRequestPermissionsResult(requestCode: Int,
                                             permissions: Array<String>, grantResults: IntArray) {
@@ -204,30 +205,15 @@ class MainActivity :
 
     fun moreActions(view: View) {
         val position = view.tag as Int
+        val listener = ContactMoreActionsListener(contacts[position], this)
         val popup = PopupMenu(this, view)
         val inflater = popup.menuInflater
-        popup.setOnMenuItemClickListener(this)
+        popup.setOnMenuItemClickListener(listener)
         inflater.inflate(R.menu.contact_menu, popup.menu)
         popup.show()
     }
 
-    override fun onMenuItemClick(item : MenuItem) : Boolean {
-        when (item.itemId) {
-            R.id.action_change_contact_method -> {
-                // TODO: A fragment / overlay view
-            }
-            R.id.action_change_last_contact -> {
-                // TODO: date and time picker overlay / fragment
-            }
-            R.id.action_remove_contact -> {
-                // TODO: remove contact from group
-                // TODO: add toast with undo button
-            }
-        }
-        return true
-    }
-
-    private fun refreshList() {
+    fun refreshList() {
         contacts.sortBy {
             it.lastContacted ?: Date(0L)
         }
@@ -299,29 +285,27 @@ class MainActivity :
     }
 
     private fun getCatchUpGroupId() : Long? {
-        val catchUpGroupName = "catch-up"
         val projection = arrayOf(
             ContactsContract.Groups._ID,
             ContactsContract.Groups.TITLE
         )
         val selection = ContactsContract.Groups.TITLE + " = ?"
         val args = arrayOf(
-            catchUpGroupName
+            catchupGroup
         )
-        val cursor = with(contentResolver) {
-            query(
-                ContactsContract.Groups.CONTENT_URI,
-                projection,
-                selection,
-                args,
-                null
-            )
-        } ?: return null
 
-        if (cursor.moveToFirst()) {
-            val id = cursor.getLong(cursor.getColumnIndex(ContactsContract.Groups._ID))
-            cursor.close()
-            return id
+        contentResolver.query(
+            ContactsContract.Groups.CONTENT_URI,
+            projection,
+            selection,
+            args,
+            null
+        )?.use { cursor ->
+            if (cursor.moveToFirst()) {
+                val id = cursor.getLong(cursor.getColumnIndex(ContactsContract.Groups._ID))
+                cursor.close()
+                return id
+            }
         }
         return null
     }
@@ -341,36 +325,39 @@ class MainActivity :
         val args = arrayOf(
             groupId.toString()
         )
-        val cursor = with(contentResolver) {
-            query(
-                ContactsContract.Data.CONTENT_URI,
-                projection,
-                selection,
-                args,
-                null
-            )
-        } ?: return contactDetails
-        if (cursor.moveToFirst()) {
-            do {
-                val id = cursor.getLong(cursor.getColumnIndex(ContactsContract.CommonDataKinds.GroupMembership.CONTACT_ID))
-                val name = cursor.getString(cursor.getColumnIndex(ContactsContract.Contacts.DISPLAY_NAME))
-                var photo : Bitmap? = null
-                try {
-                    val stream = ContactsContract.Contacts.openContactPhotoInputStream(contentResolver,
-                        ContentUris.withAppendedId(ContactsContract.Contacts.CONTENT_URI, id))
-                    stream?.let {
-                        photo = BitmapFactory.decodeStream(it)
-                        stream.close()
+        contentResolver.query(
+            ContactsContract.Data.CONTENT_URI,
+            projection,
+            selection,
+            args,
+            null
+        )?.use { cursor ->
+            if (cursor.moveToFirst()) {
+                do {
+                    val id =
+                        cursor.getLong(cursor.getColumnIndex(ContactsContract.CommonDataKinds.GroupMembership.CONTACT_ID))
+                    val name =
+                        cursor.getString(cursor.getColumnIndex(ContactsContract.Contacts.DISPLAY_NAME))
+                    var photo: Bitmap? = null
+                    try {
+                        val stream = ContactsContract.Contacts.openContactPhotoInputStream(
+                            contentResolver,
+                            ContentUris.withAppendedId(ContactsContract.Contacts.CONTENT_URI, id)
+                        )
+                        stream?.let {
+                            photo = BitmapFactory.decodeStream(it)
+                            stream.close()
+                        }
+                    } catch (e: IOException) {
                     }
-                } catch (e : IOException) {}
-                val lastContact : Date? = null
-                val contactMethod : String? = null
-                val address : String? = null
-                val contact = Contact(id, name, photo, lastContact, contactMethod, address)
-                contactDetails.add(contact)
-            } while (cursor.moveToNext())
+                    val lastContact: Date? = null
+                    val contactMethod: String? = null
+                    val address: String? = null
+                    val contact = Contact(id, name, photo, lastContact, contactMethod, address)
+                    contactDetails.add(contact)
+                } while (cursor.moveToNext())
+            }
         }
-        cursor.close()
         return contactDetails
     }
 
