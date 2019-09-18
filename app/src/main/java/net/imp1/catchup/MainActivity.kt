@@ -148,7 +148,7 @@ class MainActivity :
             }
             var contactMethodString : String? = null
             contact.contactMethod?.let {
-                contactMethodString = it.toString()
+                contactMethodString = it.name
             }
             var contactAddressString : String? = null
             contact.address?.let {
@@ -247,36 +247,16 @@ class MainActivity :
         contact?.let { con ->
             con.updateLastContacted()
             contactAdapter.notifyDataSetChanged()
-            val protocol = when(con.contactMethod) {
-                ContactMethod.TELEPHONE -> "tel"
-                ContactMethod.SMS -> "sms"
-                ContactMethod.EMAIL -> "mailto"
-                ContactMethod.WHATSAPP -> "smsto"
-                ContactMethod.SIGNAL -> "smsto"
-                // TODO: add telegram to list
-                // TODO: add skype to list
-                // TODO: split whatsapp (and others) into text and call
-                else -> "tel"
-            }
+            val protocol = con.contactMethod?.protocol ?: "tel"
             val address = con.address!!
             val uri = Uri.parse("$protocol:$address")
-            val action = when (con.contactMethod) {
-                ContactMethod.TELEPHONE -> Intent.ACTION_DIAL
-                ContactMethod.SMS -> Intent.ACTION_VIEW
-                ContactMethod.EMAIL -> Intent.ACTION_SENDTO
-                ContactMethod.WHATSAPP -> Intent.ACTION_SENDTO
-                ContactMethod.SIGNAL -> Intent.ACTION_SENDTO
-                else -> Intent.ACTION_SEND
-            }
-            val packageHint = when(con.contactMethod) {
-                ContactMethod.WHATSAPP -> "com.whatsapp"
-                ContactMethod.SIGNAL -> "org.thoughtcrime.securesms"
-                else -> null
-            }
+            val action = con.contactMethod?.action ?: Intent.ACTION_SEND
 
             val intent = Intent(action, uri)
 
-            packageHint?.let { intent.setPackage(it) }
+            con.contactMethod?.packageHint?.let {
+                intent.setPackage(it)
+            }
 
             val activities: List<ResolveInfo> = packageManager.queryIntentActivities(intent, 0)
             val isIntentSafe: Boolean = activities.isNotEmpty()
@@ -289,8 +269,8 @@ class MainActivity :
                 val message = "Couldn't find an app to use to catch up with $name"
                 Toast.makeText(applicationContext, message, Toast.LENGTH_LONG).show()
                 Log.e("contact", con.name)
-                Log.e("method", uri.toString())
-                Log.e("packageHint", packageHint.toString())
+                Log.e("method", con.contactMethod.toString())
+                Log.e("uri", uri.toString())
             }
         }
     }
