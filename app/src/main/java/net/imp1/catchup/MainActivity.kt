@@ -76,6 +76,11 @@ class MainActivity :
     private fun setup() {
         contacts = getContactDetails()
 
+        // For a hard reset, uncomment this out
+//        try {
+//            deleteFile(CONTACT_INFO_FILENAME)
+//        } catch (e : FileNotFoundException ) {}
+
         try {
             loadCatchUpContactDetails()
         } catch (e : FileNotFoundException ) {
@@ -179,7 +184,19 @@ class MainActivity :
     }
 
     private fun setupDefaultCatchUpContactDetails() {
-
+        val uri = ContactsContract.CommonDataKinds.Phone.CONTENT_URI
+        val projection = null
+        val selection = ContactsContract.CommonDataKinds.Phone.CONTACT_ID + " = ?"
+        contacts.forEach { contact ->
+            val args : Array<String> = arrayOf(contact.id.toString())
+            contentResolver.query(uri, projection, selection, args, null)?.use { cursor ->
+                if (cursor.moveToFirst()) {
+                    val number = cursor.getString(cursor.getColumnIndex(ContactsContract.CommonDataKinds.Phone.NUMBER))
+                    contact.address = number
+                    contact.contactMethod = "tel"
+                }
+            }
+        }
     }
 
     private fun refreshList() {
