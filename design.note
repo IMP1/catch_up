@@ -40,38 +40,6 @@ https://stackoverflow.com/questions/20541821/get-listview-item-position-on-butto
 Request permissions
 https://developer.android.com/training/permissions/requesting
 
-# RoadMap
-
-  - [X] `v0.1.0` : Display names of contacts in catch-up group
-  - [X] `v0.2.0` : Store last time contacted for contacts
-  - [X] `v0.3.0` : Display details of contacts
-                      * name
-                      * photo
-                      * time since last contact (in readable form)
-  - [ ] `v0.4.0` : Display actions for contacts
-                      * update last contact time
-                      * contact them in fave way
-                      * contact them in other way
-                      * edit contact
-  - [ ] `v0.5.0` : Store contact methods for contacts (default to call)
-  - [ ] `v0.6.0` : Can manually update last contact time to now
-  - [ ] `v0.7.0` : Can edit contact method for contacts
-  - [ ] `v0.8.0` : Can remove contact from this group (from within this app)
-  - [ ] `v0.9.0` : Can add contact to this group (from within this app)
-  - [ ] `v0.10.0` : Contact method button takes you to relevant app
-
-
-MainActivity (contact list)
-    ContactListFragment
-        contact_list_view
-        contact_list_item_view
-    ContactViewFragment
-        contact_action_view
-ContactEditActivity
-    ContactEditFragment
-        contact_edit_view
-
-
 Getting contact data
 https://stackoverflow.com/questions/10117049/get-only-email-address-from-contact-list-android
 https://stackoverflow.com/questions/4334649/accessing-android-contact-group-names
@@ -90,5 +58,43 @@ Saving data specific to this app
 https://developer.android.com/training/data-storage/room/index.html
 
 
+# RoadMap
+
+  - [X] `v0.1.0` : Display names of contacts in catch-up group
+  - [X] `v0.2.0` : Store last time contacted for contacts
+  - [X] `v0.3.0` : Display details of contacts
+                  - [X] name
+                  - [X] photo
+                  - [X] time since last contact (in readable form)
+  - [ ] `v0.4.0` : Display actions for contacts
+                  - [X] update last contact time
+                  - [X] contact them in fave way
+                  - [ ] contact them in other way
+                  - [ ] edit contact
+  - [X] `v0.5.0` : Store contact methods for contacts (default to call)
+  - [X] `v0.6.0` : Can manually update last contact time to now
+  - [ ] `v0.7.0` : Can edit contact method for contacts
+  - [ ] `v0.8.0` : Can remove contact from this group (from within this app)
+  - [ ] `v0.9.0` : Can add contact to this group (from within this app)
+  - [ ] `v0.10.0` : Contact method button takes you to relevant app
 
 
+
+# Breakdown
+
+MainActivity (contact list)
+    ContactListFragment
+        contact_list_view
+        contact_list_item_view
+    ContactViewFragment
+        contact_action_view
+ContactEditActivity
+    ContactEditFragment
+        contact_edit_view
+
+
+# Feature Creep
+
+  * Last contacted time is updated when a contact is messaged in another app
+    No idea how this would be done, but a cool feature.
+  * 
