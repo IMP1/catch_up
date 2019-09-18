@@ -80,8 +80,16 @@ class ContactListAdapter(context: Context, resource: Int) :
         contactImageView.contentDescription = context.getString(R.string.contact_photo_description, contact.name)
 
         catchUpButton.let {
+            val iconId = when(contact.contactMethod) {
+                "tel" -> R.drawable.ic_phone_black_24dp
+                "sms" -> R.drawable.ic_chat_black_24dp
+                "email" -> R.drawable.ic_email_black_24dp
+                "whatsapp" -> R.drawable.ic_chat_black_24dp // TODO: get whatsapp icon
+                "signal" -> R.drawable.ic_chat_black_24dp // TODO: get signal icon
+                else -> R.drawable.ic_phone_black_24dp
+            }
             it.setCompoundDrawablesRelativeWithIntrinsicBounds(
-                R.drawable.ic_phone_black_24dp, 0, 0, 0)
+                iconId, 0, 0, 0)
             it.tag = position
         }
         resetButton.let {
