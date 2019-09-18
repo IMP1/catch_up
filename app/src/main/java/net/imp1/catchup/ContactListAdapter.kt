@@ -81,11 +81,11 @@ class ContactListAdapter(context: Context, resource: Int) :
 
         catchUpButton.let {
             val iconId = when(contact.contactMethod) {
-                "tel" -> R.drawable.ic_phone_black_24dp
-                "sms" -> R.drawable.ic_chat_black_24dp
-                "email" -> R.drawable.ic_email_black_24dp
-                "whatsapp" -> R.drawable.ic_chat_black_24dp // TODO: get whatsapp icon
-                "signal" -> R.drawable.ic_chat_black_24dp // TODO: get signal icon
+                ContactMethod.TELEPHONE -> R.drawable.ic_phone_black_24dp
+                ContactMethod.SMS -> R.drawable.ic_chat_black_24dp
+                ContactMethod.EMAIL -> R.drawable.ic_email_black_24dp
+                ContactMethod.WHATSAPP -> R.drawable.ic_chat_black_24dp // TODO: get whatsapp icon
+                ContactMethod.SIGNAL -> R.drawable.ic_chat_black_24dp // TODO: get signal icon
                 else -> R.drawable.ic_phone_black_24dp
             }
             it.setCompoundDrawablesRelativeWithIntrinsicBounds(

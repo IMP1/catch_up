@@ -8,8 +8,15 @@ data class Contact (
     var name: String,
     var photo: Bitmap?,
     var lastContacted: Date?,
-    var contactMethod: String?,
+    var contactMethod: ContactMethod?,
     var address: String?) {
+
+    companion object {
+        const val ID = "id"
+        const val LAST_CONTACTED = "last_contacted"
+        const val CONTACT_METHOD = "contact_method"
+        const val ADDRESS = "address"
+    }
 
     fun updateLastContacted(date : Date) {
         lastContacted = date

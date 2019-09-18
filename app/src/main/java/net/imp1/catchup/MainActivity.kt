@@ -80,10 +80,12 @@ class MainActivity :
         contacts = getContactDetails()
 
         // For a hard reset, uncomment this out
+        // <remove>
         // TODO: remove this when all is working
         try {
             deleteFile(CONTACT_INFO_FILENAME)
         } catch (e : FileNotFoundException ) {}
+        // </remove>
 
         try {
             loadCatchUpContactDetails()
@@ -91,7 +93,6 @@ class MainActivity :
             setupDefaultCatchUpContactDetails()
         }
 
-        // TODO: order the contacts
         contacts.sortBy {
             it.lastContacted ?: Date(0L)
         }
@@ -147,11 +148,16 @@ class MainActivity :
             }
             var contactMethodString : String? = null
             contact.contactMethod?.let {
-                contactMethodString = it
+                contactMethodString = it.toString()
             }
-            obj.put("id", contact.id)
-            obj.put("last_contacted", lastContactString)
-            obj.put("contact_method", contactMethodString)
+            var contactAddressString : String? = null
+            contact.address?.let {
+                contactAddressString = it
+            }
+            obj.put(Contact.ID, contact.id)
+            obj.put(Contact.LAST_CONTACTED, lastContactString)
+            obj.put(Contact.CONTACT_METHOD, contactMethodString)
+            obj.put(Contact.ADDRESS, contactAddressString)
             list.put(obj)
         }
         openFileOutput(CONTACT_INFO_FILENAME, MODE_PRIVATE)?.use {
@@ -170,10 +176,10 @@ class MainActivity :
         val list = JSONArray(jsonString)
         for (i in 0 until list.length()) {
             val item = list.getJSONObject(i)
-            val id = item.getLong("id")
+            val id = item.getLong(Contact.ID)
             val contact = contacts.find { it.id == id } ?: continue
-            if (item.has("last_contacted")) {
-                val lastContactString = item.getString("last_contacted")
+            if (item.has(Contact.LAST_CONTACTED)) {
+                val lastContactString = item.getString(Contact.LAST_CONTACTED)
                 try {
                     val lastContactDate = DATE_FORMATTER.parse(lastContactString)
                     contact.lastContacted = lastContactDate ?: contact.lastContacted
@@ -182,8 +188,13 @@ class MainActivity :
                     Toast.makeText(applicationContext, e.message, Toast.LENGTH_LONG).show()
                 }
             }
-            // TODO: load contact method and address
-            // TODO: give all contacts a contactMethod and address
+            if (item.has(Contact.CONTACT_METHOD)) {
+                val contactMethodString = item.getString(Contact.CONTACT_METHOD)
+                contact.contactMethod = ContactMethod.valueOf(contactMethodString)
+            }
+            if (item.has(Contact.ADDRESS)) {
+                contact.address = item.getString(Contact.ADDRESS)
+            }
         }
     }
 
@@ -197,7 +208,7 @@ class MainActivity :
                 if (cursor.moveToFirst()) {
                     val number = cursor.getString(cursor.getColumnIndex(ContactsContract.CommonDataKinds.Phone.NUMBER))
                     contact.address = number
-                    contact.contactMethod = "tel"
+                    contact.contactMethod = ContactMethod.TELEPHONE
                 }
             }
         }
@@ -237,11 +248,11 @@ class MainActivity :
             con.updateLastContacted()
             contactAdapter.notifyDataSetChanged()
             val protocol = when(con.contactMethod) {
-                "tel" -> "tel"
-                "sms" -> "sms"
-                "email" -> "mailto"
-                "whatsapp" -> "smsto"
-                "signal" -> "smsto"
+                ContactMethod.TELEPHONE -> "tel"
+                ContactMethod.SMS -> "sms"
+                ContactMethod.EMAIL -> "mailto"
+                ContactMethod.WHATSAPP -> "smsto"
+                ContactMethod.SIGNAL -> "smsto"
                 // TODO: add telegram to list
                 // TODO: add skype to list
                 // TODO: split whatsapp (and others) into text and call
@@ -250,16 +261,16 @@ class MainActivity :
             val address = con.address!!
             val uri = Uri.parse("$protocol:$address")
             val action = when (con.contactMethod) {
-                "tel" -> Intent.ACTION_DIAL
-                "sms" -> Intent.ACTION_VIEW
-                "email" -> Intent.ACTION_SENDTO
-                "whatsapp" -> Intent.ACTION_SENDTO
-                "signal" -> Intent.ACTION_SENDTO
+                ContactMethod.TELEPHONE -> Intent.ACTION_DIAL
+                ContactMethod.SMS -> Intent.ACTION_VIEW
+                ContactMethod.EMAIL -> Intent.ACTION_SENDTO
+                ContactMethod.WHATSAPP -> Intent.ACTION_SENDTO
+                ContactMethod.SIGNAL -> Intent.ACTION_SENDTO
                 else -> Intent.ACTION_SEND
             }
             val packageHint = when(con.contactMethod) {
-                "whatsapp" -> "com.whatsapp"
-                "signal" -> "org.thoughtcrime.securesms"
+                ContactMethod.WHATSAPP -> "com.whatsapp"
+                ContactMethod.SIGNAL -> "org.thoughtcrime.securesms"
                 else -> null
             }
 
@@ -351,7 +362,7 @@ class MainActivity :
                     } catch (e: IOException) {
                     }
                     val lastContact: Date? = null
-                    val contactMethod: String? = null
+                    val contactMethod: ContactMethod? = null
                     val address: String? = null
                     val contact = Contact(id, name, photo, lastContact, contactMethod, address)
                     contactDetails.add(contact)
