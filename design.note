@@ -26,13 +26,13 @@ https://stackoverflow.com/questions/7937794/how-to-get-installed-applications-pe
 
 Integration with comms apps
 
-  * Whatsapp: https://faq.whatsapp.com/en/android/28000012
+  * Phone: https://stackoverflow.com/questions/4275678/how-to-make-a-phone-call-using-intent-in-android
   * SMS: https://stackoverflow.com/questions/9798657/send-a-sms-via-intent
   * Email: https://stackoverflow.com/questions/8701634/send-email-intent
-  * Phone: https://stackoverflow.com/questions/4275678/how-to-make-a-phone-call-using-intent-in-android
-  * Messenger: https://stackoverflow.com/questions/26101675/share-a-text-with-facebook-messenger
-  * Telegram: https://stackoverflow.com/questions/21627167/how-to-send-a-intent-with-telegram
+  * Whatsapp: https://faq.whatsapp.com/en/android/28000012
   * Signal: ??? modify telegram technique
+  * Telegram: https://stackoverflow.com/questions/21627167/how-to-send-a-intent-with-telegram
+  * Messenger: https://stackoverflow.com/questions/26101675/share-a-text-with-facebook-messenger
 
 Get row of button in list
 https://stackoverflow.com/questions/20541821/get-listview-item-position-on-button-click
@@ -77,6 +77,9 @@ https://developer.android.com/training/data-storage/room/index.html
   - [ ] `v0.8.0` : Can remove contact from this group (from within this app)
   - [ ] `v0.9.0` : Can add contact to this group (from within this app)
   - [ ] `v0.10.0` : Contact method button takes you to relevant app
+
+  - [ ] `v1.0.0-legal` : About page view with license and link to github
+  - [ ] `v1.0.0` : Readme page with breakdown on what Catch Up is
 
 
 
