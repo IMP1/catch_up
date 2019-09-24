@@ -1,17 +1,22 @@
 package net.imp1.catchup
 
+import android.content.Intent
 import android.provider.ContactsContract
 import android.util.Log
 import android.view.MenuItem
 import android.widget.PopupMenu
 import android.widget.Toast
+import androidx.core.content.ContextCompat
 
 class ContactMoreActionsListener(private val contact : Contact, private val activity: MainActivity) : PopupMenu.OnMenuItemClickListener {
 
     override fun onMenuItemClick(item: MenuItem): Boolean {
         when (item.itemId) {
             R.id.action_change_contact_method -> {
-                // TODO: A fragment / overlay view
+                val intent = Intent(activity, EditContactMethodActivity::class.java)
+                intent.putExtra(Contact.ID, contact.id)
+                activity.startActivity(intent)
+                // TODO: Change from activity to fragment
             }
             R.id.action_change_last_contact -> {
                 // TODO: date and time picker overlay / fragment
