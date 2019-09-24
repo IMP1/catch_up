@@ -79,12 +79,12 @@ class MainActivity :
     private fun setup() {
         contacts = getContactDetails()
 
-        // For a hard reset, uncomment this out
         // <remove>
         // TODO: remove this when all is working
-        try {
-            deleteFile(CONTACT_INFO_FILENAME)
-        } catch (e : FileNotFoundException ) {}
+        // For a hard reset, uncomment this out
+//        try {
+//            deleteFile(CONTACT_INFO_FILENAME)
+//        } catch (e : FileNotFoundException ) {}
         // </remove>
 
         try {
