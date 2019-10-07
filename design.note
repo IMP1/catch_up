@@ -69,16 +69,17 @@ https://developer.android.com/training/data-storage/room/index.html
   - [ ] `v0.4.0` : Display actions for contacts
                   - [X] update last contact time
                   - [X] contact them in fave way
+                  - [ ] open contact (intent of contact app)
                   - [ ] contact them in other way
-                  - [ ] edit contact
   - [X] `v0.5.0` : Store contact methods for contacts (default to call)
   - [X] `v0.6.0` : Can manually update last contact time to now
+  - [ ] `v0.6.0` : Can manually update last contact time to specific time
   - [ ] `v0.7.0` : Can edit contact method for contacts
   - [ ] `v0.8.0` : Can remove contact from this group (from within this app)
   - [ ] `v0.9.0` : Can add contact to this group (from within this app)
   - [ ] `v0.10.0` : Contact method button takes you to relevant app
 
-  - [ ] `v1.0.0-legal` : About page view with license and link to github
+  - [ ] `v1.0.0-docs` : About page view with license and link to github
   - [ ] `v1.0.0` : Readme page with breakdown on what Catch Up is
 
 
