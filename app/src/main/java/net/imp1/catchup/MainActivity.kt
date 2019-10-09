@@ -224,6 +224,16 @@ class MainActivity :
         popup.show()
     }
 
+    fun viewContact(view: View) {
+        val position = view.tag as Int
+        val id = contacts[position].id.toString()
+        val contactUri = Uri.withAppendedPath(ContactsContract.Contacts.CONTENT_URI, id)
+        val intent = Intent(Intent.ACTION_VIEW, contactUri)
+        if (intent.resolveActivity(packageManager) != null) {
+            startActivity(intent)
+        }
+    }
+
     fun refreshList() {
         contacts.sortBy {
             it.lastContacted ?: Date(0L)
@@ -304,12 +314,12 @@ class MainActivity :
     private fun getContactDetails() : ArrayList<Contact> {
         val contactDetails = ArrayList<Contact>()
         val groupId = getCatchUpGroupId() ?: return contactDetails
-        val projection = arrayOf(
+        val selection = arrayOf(
             ContactsContract.CommonDataKinds.GroupMembership.CONTACT_ID,
             ContactsContract.Contacts.DISPLAY_NAME,
             ContactsContract.Contacts.PHOTO_URI
         )
-        val selection =
+        val condition =
             ContactsContract.CommonDataKinds.GroupMembership.GROUP_ROW_ID + " = ? AND " +
             ContactsContract.CommonDataKinds.GroupMembership.MIMETYPE + " = '" +
             ContactsContract.CommonDataKinds.GroupMembership.CONTENT_ITEM_TYPE + "'"
@@ -318,8 +328,8 @@ class MainActivity :
         )
         contentResolver.query(
             ContactsContract.Data.CONTENT_URI,
-            projection,
             selection,
+            condition,
             args,
             null
         )?.use { cursor ->

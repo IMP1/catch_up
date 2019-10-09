@@ -7,7 +7,10 @@
     android:paddingTop="4dp"
     android:paddingEnd="4dp"
     android:paddingRight="4dp"
-    android:paddingBottom="4dp">
+    android:paddingBottom="4dp"
+    android:clickable="true"
+    android:focusable="true"
+    android:onClick="viewContact">
 
     <de.hdodenhof.circleimageview.CircleImageView
         android:id="@+id/contact_image"

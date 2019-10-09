@@ -102,6 +102,9 @@ class ContactListAdapter(context: Context, resource: Int) :
                 R.drawable.ic_more_vert_black_24dp, 0, 0, 0)
             it.tag = position
         }
+        rowView.let {
+            it.tag = position
+        }
 
         return rowView
     }
