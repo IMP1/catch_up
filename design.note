@@ -1,3 +1,5 @@
+# Overview
+
 list of contacts with optional filter
 data for each contact needs to be added with the last contacted time and the 
 default contact method
@@ -29,7 +31,7 @@ Integration with comms apps
   * Phone: https://stackoverflow.com/questions/4275678/how-to-make-a-phone-call-using-intent-in-android
   * SMS: https://stackoverflow.com/questions/9798657/send-a-sms-via-intent
   * Email: https://stackoverflow.com/questions/8701634/send-email-intent
-  * Whatsapp: https://faq.whatsapp.com/en/android/28000012
+  * WhatsApp: https://faq.whatsapp.com/en/android/28000012
   * Signal: ??? modify telegram technique
   * Telegram: https://stackoverflow.com/questions/21627167/how-to-send-a-intent-with-telegram
   * Messenger: https://stackoverflow.com/questions/26101675/share-a-text-with-facebook-messenger
@@ -57,6 +59,21 @@ Saving data specific to this app
 (last contact time, preffered contact method)
 https://developer.android.com/training/data-storage/room/index.html
 
+# Visual Design
+
+## List
+
+## Edit Contact Method
+
+Tabs with icons for calls, videos and messages.
+Each tab will list the apps that can perform that action.
+So an app can come under different headings, but performing different actions (WhatsApp video call vs WhatsApp message)
+Email comes under messages.
+
+## Edit Last Contact Time
+
+Date picker and time picker. Date defaults to today, time defaults to now.
+Option to set the last time to 'Never' (which sets it internally to null).
 
 # RoadMap
 
@@ -79,8 +96,10 @@ https://developer.android.com/training/data-storage/room/index.html
   - [ ] `v0.9.0` : Can add contact to this group (from within this app)
   - [ ] `v0.10.0` : Contact method button takes you to relevant app
 
-  - [ ] `v1.0.0-docs` : About page view with license and link to github
-  - [ ] `v1.0.0` : Readme page with breakdown on what Catch Up is
+  - [ ] `v1.0.0-docs` : Documentation of app
+                  - [ ] About page view with license and link to github
+                  - [ ] Readme and license on github page
+  - [ ] `v1.0.0` : Final release version. Only bugfixes on this branch.
 
 
 
@@ -101,4 +120,6 @@ ContactEditActivity
 
   * Last contacted time is updated when a contact is messaged in another app
     No idea how this would be done, but a cool feature.
-  * 
+  * A list of the last X contact times for a contact, with the option to 'undo' one, 
+    which would revert the contact time to the previous one. Or, if it's the last in the queue, 
+    to a manual picker.
