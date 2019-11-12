@@ -35,6 +35,7 @@ Integration with comms apps
   * Signal: ??? modify telegram technique
   * Telegram: https://stackoverflow.com/questions/21627167/how-to-send-a-intent-with-telegram
   * Messenger: https://stackoverflow.com/questions/26101675/share-a-text-with-facebook-messenger
+  * Riot.im: ???
 
 Get row of button in list
 https://stackoverflow.com/questions/20541821/get-listview-item-position-on-button-click
@@ -58,6 +59,18 @@ https://developer.android.com/training/contacts-provider/modify-data
 Saving data specific to this app
 (last contact time, preffered contact method)
 https://developer.android.com/training/data-storage/room/index.html
+
+Getting logs from comms apps
+
+  * Phone: https://stackoverflow.com/questions/6786666/how-do-i-access-call-log-for-android
+  * SMS:
+  * Email:
+  * WhatsApp: https://stackoverflow.com/questions/8856874/get-all-messages-from-whatsapp
+              Or maybe from backup on google drive?
+  * Signal: ???
+  * Telegram: ???
+  * Messenger: ???
+  * Riot.im: ???
 
 # Visual Design
 
@@ -120,6 +133,7 @@ ContactEditActivity
 
   * Last contacted time is updated when a contact is messaged in another app
     No idea how this would be done, but a cool feature.
+    Folarin suggested using call logs, which seems like a genius idea.
   * A list of the last X contact times for a contact, with the option to 'undo' one, 
     which would revert the contact time to the previous one. Or, if it's the last in the queue, 
     to a manual picker.
