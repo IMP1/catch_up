@@ -6,7 +6,8 @@ import android.util.Log
 import android.view.MenuItem
 import android.widget.PopupMenu
 import android.widget.Toast
-import androidx.core.content.ContextCompat
+import java.util.*
+
 
 class ContactMoreActionsListener(private val contact : Contact, private val activity: MainActivity) : PopupMenu.OnMenuItemClickListener {
 
@@ -19,6 +20,8 @@ class ContactMoreActionsListener(private val contact : Contact, private val acti
                 // TODO: Change from activity to fragment
             }
             R.id.action_change_last_contact -> {
+                showDatetimePicker(contact)
+                // TODO: end with `activity.refreshList()`
                 // TODO: date and time picker overlay / fragment
             }
             R.id.action_remove_contact -> {
@@ -32,7 +35,7 @@ class ContactMoreActionsListener(private val contact : Contact, private val acti
     }
 
 
-    private fun removeContact(contact : Contact) {
+    private fun removeContact(contact: Contact) {
         val id = contact.id
         val mimeType = ContactsContract.CommonDataKinds.GroupMembership.CONTENT_ITEM_TYPE
         val where = ContactsContract.Groups.TITLE + " = ? AND " +
@@ -45,6 +48,19 @@ class ContactMoreActionsListener(private val contact : Contact, private val acti
             Toast.makeText(activity, e.toString(), Toast.LENGTH_LONG).show()
             Log.e("remove_contact_error", e.toString())
         }
+    }
+
+    private fun showDatetimePicker(contact: Contact) {
+        val now = Calendar.getInstance()
+        val year = now.get(Calendar.YEAR)
+        val month = now.get(Calendar.MONTH)
+        val day = now.get(Calendar.DAY_OF_MONTH)
+        // TODO: dismiss the popup window when touched
+    }
+
+    private fun closeDateTimePicker() {
+        val dateFragment = ContactTimePickerFragment()
+        dateFragment.show(activity.supportFragmentManager, "datePicker")
     }
 
 
