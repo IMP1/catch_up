@@ -224,6 +224,10 @@ class MainActivity :
         popup.show()
     }
 
+    fun changeLastContactTime(view: View) {
+
+    }
+
     fun viewContact(view: View) {
         val position = view.tag as Int
         val id = contacts[position].id.toString()
