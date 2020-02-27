@@ -109,7 +109,7 @@ Option to set the last time to 'Never' (which sets it internally to null).
   - [ ] `v0.9.0` : Can add contact to this group (from within this app)
   - [ ] `v0.10.0` : Contact method button takes you to relevant app
 
-  - [ ] `v1.0.0-docs` : Documentation of app
+  - [ ] `v0.11.0` : Documentation of app
                   - [ ] About page view with license and link to github
                   - [ ] Readme and license on github page
   - [ ] `v1.0.0` : Final release version. Only bugfixes on this branch.
@@ -137,3 +137,4 @@ ContactEditActivity
   * A list of the last X contact times for a contact, with the option to 'undo' one, 
     which would revert the contact time to the previous one. Or, if it's the last in the queue, 
     to a manual picker.
+  * Time since last contact changing to red as it gets older.
