@@ -6,10 +6,15 @@ import android.util.Log
 import android.view.MenuItem
 import android.widget.PopupMenu
 import android.widget.Toast
+import android.app.DatePickerDialog;
+import android.widget.DatePicker
+import java.time.LocalDate
 import java.util.*
 
 
-class ContactMoreActionsListener(private val contact : Contact, private val activity: MainActivity) : PopupMenu.OnMenuItemClickListener {
+class ContactMoreActionsListener(private val contact : Contact, private val activity: MainActivity) :
+    PopupMenu.OnMenuItemClickListener,
+    DatePickerDialog.OnDateSetListener {
 
     override fun onMenuItemClick(item: MenuItem): Boolean {
         when (item.itemId) {
@@ -20,9 +25,9 @@ class ContactMoreActionsListener(private val contact : Contact, private val acti
                 // TODO: Change from activity to fragment
             }
             R.id.action_change_last_contact -> {
-                showDatetimePicker(contact)
-                // TODO: end with `activity.refreshList()`
+                showDatePicker(contact)
                 // TODO: date and time picker overlay / fragment
+                activity.refreshList()
             }
             R.id.action_remove_contact -> {
                 // TODO: remove contact from group
@@ -50,18 +55,20 @@ class ContactMoreActionsListener(private val contact : Contact, private val acti
         }
     }
 
-    private fun showDatetimePicker(contact: Contact) {
+    private fun showDatePicker(contact: Contact) {
         val now = Calendar.getInstance()
         val year = now.get(Calendar.YEAR)
         val month = now.get(Calendar.MONTH)
         val day = now.get(Calendar.DAY_OF_MONTH)
         // TODO: dismiss the popup window when touched
+        val dateFragment = DatePickerDialog(activity, this, year, month, day)
+        dateFragment.show()
     }
 
-    private fun closeDateTimePicker() {
-        val dateFragment = ContactTimePickerFragment()
-        dateFragment.show(activity.supportFragmentManager, "datePicker")
+    override fun onDateSet(view: DatePicker?, year: Int, month: Int, dayOfMonth: Int) {
+        val date = LocalDate.of(year, month, dayOfMonth)
+        contact.updateLastContacted(date)
+        activity.refreshList()
     }
-
 
 }

@@ -8,8 +8,8 @@ import android.widget.ArrayAdapter
 import android.widget.Button
 import android.widget.ImageView
 import android.widget.TextView
-import java.util.*
-import java.util.concurrent.TimeUnit
+import java.time.LocalDate
+import java.time.Period
 import kotlin.collections.ArrayList
 
 class ContactListAdapter(context: Context, resource: Int) :
@@ -29,31 +29,29 @@ class ContactListAdapter(context: Context, resource: Int) :
         return values[position]
     }
 
-    private fun getLastContactedTime(datetime: Date?) : String {
-        val now = Calendar.getInstance().timeInMillis
-        datetime?.let {
-            val duration = now - datetime.time
-            val days = TimeUnit.DAYS.convert(duration, TimeUnit.MILLISECONDS)
+    private fun getLastContactedTime(datetime: LocalDate?) : String {
+        val now = LocalDate.now()
+        datetime?.let { then ->
+            val days = Period.between(then, now).days
             val weeks = days / 7
+            val years = Period.between(then, now).years
+            val months = Period.between(then, now).months
+            if (years > 0) {
+                return context.resources.getQuantityString(R.plurals.years_ago, years, years)
+            }
+            if (months > 0) {
+                return context.resources.getQuantityString(R.plurals.months_ago, months, months)
+            }
             if (weeks > 0) {
-                return context.getString(R.string.weeks_ago, weeks)
+                return context.resources.getQuantityString(R.plurals.weeks_ago, weeks, weeks)
+            }
+            if (days > 1) {
+                return context.resources.getQuantityString(R.plurals.days_ago, days, days)
             }
             if (days > 0) {
-                return context.getString(R.string.days_ago, days)
+                return context.getString(R.string.yesterday)
             }
-            val hours = TimeUnit.HOURS.convert(duration, TimeUnit.MILLISECONDS)
-            if (hours > 0) {
-                return context.getString(R.string.hours_ago, hours)
-            }
-            val minutes = TimeUnit.MINUTES.convert(duration, TimeUnit.MILLISECONDS)
-            if (minutes > 0) {
-                return context.getString(R.string.minutes_ago, minutes)
-            }
-            val seconds = TimeUnit.SECONDS.convert(duration, TimeUnit.MILLISECONDS)
-            if (seconds > 10) {
-                return context.getString(R.string.seconds_ago, seconds)
-            }
-            return context.getString(R.string.just_now)
+            return context.getString(R.string.today)
         }
         return context.getString(R.string.never)
     }

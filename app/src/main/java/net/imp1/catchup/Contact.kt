@@ -1,13 +1,13 @@
 package net.imp1.catchup
 
 import android.graphics.Bitmap
-import java.util.*
+import java.time.LocalDate
 
 data class Contact (
     val id: Long,
     var name: String,
     var photo: Bitmap?,
-    var lastContacted: Date?,
+    var lastContacted: LocalDate?,
     var contactMethod: ContactMethod?,
     var address: String?) {
 
@@ -18,12 +18,12 @@ data class Contact (
         const val ADDRESS = "address"
     }
 
-    fun updateLastContacted(date : Date) {
+    fun updateLastContacted(date : LocalDate) {
         lastContacted = date
     }
 
     fun updateLastContacted() {
-        updateLastContacted(Calendar.getInstance().time)
+        updateLastContacted(LocalDate.now())
     }
 
 }

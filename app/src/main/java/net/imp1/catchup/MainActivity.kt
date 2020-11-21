@@ -26,6 +26,7 @@ import android.view.MenuItem
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import java.io.IOException
+import java.time.LocalDate
 
 
 const val CONTACT_INFO_FILENAME = "contacts.json"
@@ -94,7 +95,7 @@ class MainActivity :
         }
 
         contacts.sortBy {
-            it.lastContacted ?: Date(0L)
+            it.lastContacted ?: LocalDate.MIN
         }
 
         val list : ListView = findViewById(R.id.list)
@@ -181,7 +182,7 @@ class MainActivity :
             if (item.has(Contact.LAST_CONTACTED)) {
                 val lastContactString = item.getString(Contact.LAST_CONTACTED)
                 try {
-                    val lastContactDate = DATE_FORMATTER.parse(lastContactString)
+                    val lastContactDate = LocalDate.parse(lastContactString)
                     contact.lastContacted = lastContactDate ?: contact.lastContacted
                 } catch (e : ParseException) {
                     contact.lastContacted = null
@@ -240,7 +241,7 @@ class MainActivity :
 
     fun refreshList() {
         contacts.sortBy {
-            it.lastContacted ?: Date(0L)
+            it.lastContacted ?: LocalDate.MIN
         }
         contactAdapter.notifyDataSetChanged()
     }
@@ -355,7 +356,7 @@ class MainActivity :
                         }
                     } catch (e: IOException) {
                     }
-                    val lastContact: Date? = null
+                    val lastContact: LocalDate? = null
                     val contactMethod: ContactMethod? = null
                     val address: String? = null
                     val contact = Contact(id, name, photo, lastContact, contactMethod, address)

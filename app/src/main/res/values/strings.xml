@@ -3,14 +3,25 @@
 <resources>
     <string name="app_name">&appname;</string>
     <string name="contact_photo_description">%1$s\'s Photo</string>
-    <string name="just_now">Just now</string>
     <string name="never">Never</string>
-    <string name="seconds_ago">%1$d seconds ago</string>
-    <string name="minutes_ago">%1$d minutes ago</string>
-    <string name="hours_ago">%1$d hours ago</string>
-    <string name="days_ago">%1$d days ago</string>
-    <string name="weeks_ago">%1$d weeks ago</string>
-    <string name="months_ago">%1$d months ago</string>
+    <string name="today">Today</string>
+    <string name="yesterday">Yesterday</string>
+    <plurals name="days_ago">
+        <item quantity="one">%1$d day ago</item>
+        <item quantity="other">%1$d days ago</item>
+    </plurals>
+    <plurals name="weeks_ago">
+        <item quantity="one">%1$d week ago</item>
+        <item quantity="other">%1$d weeks ago</item>
+    </plurals>
+    <plurals name="months_ago">
+        <item quantity="one">%1$d month ago</item>
+        <item quantity="other">%1$d months ago</item>
+    </plurals>
+    <plurals name="years_ago">
+        <item quantity="one">%1$d year ago</item>
+        <item quantity="other">%1$d years ago</item>
+    </plurals>
     <string name="add_contact">Add Contact</string>
     <string name="set_group">Set Contact Group</string>
     <string name="about">About &appname;</string>
@@ -19,8 +30,5 @@
     <string name="remove_contact">Remove from Catch Up</string>
     <string name="edit_contact_method">Edit Contact Method</string>
     <string name="edit_last_contact">Change Last Contact Time</string>
-
-    <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
-
+    <string name="hello_blank_fragment">Hello?</string>
 </resources>
