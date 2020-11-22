@@ -28,6 +28,9 @@
     <string name="cancel">Cancel</string>
     <string name="save">Save</string>
     <string name="remove_contact">Remove from Catch Up</string>
+    <string name="removed_contact">Removed %s</string>
+    <string name="restored_contact">Restored %s</string>
+    <string name="undo">Undo</string>
     <string name="edit_contact_method">Edit Contact Method</string>
     <string name="edit_last_contact">Change Last Contact Time</string>
     <string name="hello_blank_fragment">Hello?</string>
