@@ -7,8 +7,11 @@ import android.view.MenuItem
 import android.widget.PopupMenu
 import android.widget.Toast
 import android.app.DatePickerDialog;
+import android.view.View
 import android.widget.DatePicker
+import com.google.android.material.snackbar.Snackbar
 import java.time.LocalDate
+import java.time.Month
 import java.util.*
 
 
@@ -25,13 +28,20 @@ class ContactMoreActionsListener(private val contact : Contact, private val acti
                 // TODO: Change from activity to fragment
             }
             R.id.action_change_last_contact -> {
-                showDatePicker(contact)
-                // TODO: date and time picker overlay / fragment
+                showDatePicker()
                 activity.refreshList()
             }
             R.id.action_remove_contact -> {
-                // TODO: remove contact from group
-                // TODO: add toast with undo button
+                val context = activity.applicationContext
+                val undoBar = Snackbar.make(item.actionView,
+                        context.getString(R.string.removed_contact, contact.name),
+                        Snackbar.LENGTH_LONG)
+                undoBar.setAction(context.getString(R.string.undo), View.OnClickListener {
+                    Toast.makeText(context,
+                            context.getString(R.string.restored_contact, contact.name),
+                            Toast.LENGTH_SHORT).show()
+                })
+                undoBar.show()
                 removeContact(contact)
                 activity.refreshList()
             }
@@ -55,19 +65,24 @@ class ContactMoreActionsListener(private val contact : Contact, private val acti
         }
     }
 
-    private fun showDatePicker(contact: Contact) {
+    private fun showDatePicker() {
         val now = Calendar.getInstance()
         val year = now.get(Calendar.YEAR)
         val month = now.get(Calendar.MONTH)
         val day = now.get(Calendar.DAY_OF_MONTH)
-        // TODO: dismiss the popup window when touched
         val dateFragment = DatePickerDialog(activity, this, year, month, day)
+        dateFragment.datePicker.maxDate = now.timeInMillis
         dateFragment.show()
     }
 
     override fun onDateSet(view: DatePicker?, year: Int, month: Int, dayOfMonth: Int) {
-        val date = LocalDate.of(year, month, dayOfMonth)
-        contact.updateLastContacted(date)
+        // onDateSet returns a month from 0-11, but LocalDate assumes a month 1-12
+        // How ridiculous is that? But that's the reason for this silly conversion
+        val datePickerToLocalDateMonthConversion = 1
+        val date = LocalDate.of(year,
+                         month + datePickerToLocalDateMonthConversion,
+                                dayOfMonth)
+        contact.lastContacted = date
         activity.refreshList()
     }
 

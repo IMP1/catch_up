@@ -30,12 +30,13 @@ class ContactListAdapter(context: Context, resource: Int) :
     }
 
     private fun getLastContactedTime(datetime: LocalDate?) : String {
-        val now = LocalDate.now()
         datetime?.let { then ->
-            val days = Period.between(then, now).days
+            val now = LocalDate.now()
+            val period = Period.between(then, now)
+            val days = period.days
             val weeks = days / 7
-            val years = Period.between(then, now).years
-            val months = Period.between(then, now).months
+            val years = period.years
+            val months = period.months
             if (years > 0) {
                 return context.resources.getQuantityString(R.plurals.years_ago, years, years)
             }

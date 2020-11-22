@@ -18,12 +18,4 @@ data class Contact (
         const val ADDRESS = "address"
     }
 
-    fun updateLastContacted(date : LocalDate) {
-        lastContacted = date
-    }
-
-    fun updateLastContacted() {
-        updateLastContacted(LocalDate.now())
-    }
-
 }

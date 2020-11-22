@@ -13,7 +13,6 @@ import org.json.JSONArray
 import org.json.JSONObject
 import java.io.FileNotFoundException
 import java.text.ParseException
-import java.text.SimpleDateFormat
 import java.util.*
 import kotlin.collections.ArrayList
 import android.content.pm.PackageManager
@@ -27,11 +26,12 @@ import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import java.io.IOException
 import java.time.LocalDate
+import java.time.format.DateTimeFormatter
 
 
 const val CONTACT_INFO_FILENAME = "contacts.json"
 const val MY_PERMISSIONS_REQUEST_READ_CONTACTS = 1
-val DATE_FORMATTER = SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.UK)
+val DATE_FORMATTER: DateTimeFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd", Locale.UK)
 
 class MainActivity :
     AppCompatActivity() {
@@ -145,7 +145,7 @@ class MainActivity :
             val obj = JSONObject()
             var lastContactString : String? = null
             contact.lastContacted?.let {
-                lastContactString = DATE_FORMATTER.format(it)
+                lastContactString = it.format(DATE_FORMATTER)
             }
             var contactMethodString : String? = null
             contact.contactMethod?.let {
@@ -225,10 +225,6 @@ class MainActivity :
         popup.show()
     }
 
-    fun changeLastContactTime(view: View) {
-
-    }
-
     fun viewContact(view: View) {
         val position = view.tag as Int
         val id = contacts[position].id.toString()
@@ -250,7 +246,7 @@ class MainActivity :
         val position = view.tag as Int
         val contact = contactAdapter.getItem(position)
         contact?.let { con ->
-            con.updateLastContacted()
+            con.lastContacted = LocalDate.now()
             contactAdapter.notifyDataSetChanged()
             refreshList()
         }
@@ -260,7 +256,7 @@ class MainActivity :
         val position = view.tag as Int
         val contact = contactAdapter.getItem(position)
         contact?.let { con ->
-            con.updateLastContacted()
+            con.lastContacted = LocalDate.now()
             contactAdapter.notifyDataSetChanged()
             val protocol = con.contactMethod?.protocol ?: "tel"
             val address = con.address!!
