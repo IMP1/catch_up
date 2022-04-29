@@ -226,6 +226,12 @@ class MainActivity :
     }
 
     fun viewContact(view: View) {
+        if (view.tag == null) {
+            println("Tag is null")
+            println(view)
+            println(view.tag)
+            return
+        }
         val position = view.tag as Int
         val id = contacts[position].id.toString()
         val contactUri = Uri.withAppendedPath(ContactsContract.Contacts.CONTENT_URI, id)

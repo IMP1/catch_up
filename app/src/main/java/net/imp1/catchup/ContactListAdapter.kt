@@ -8,6 +8,7 @@ import android.widget.ArrayAdapter
 import android.widget.Button
 import android.widget.ImageView
 import android.widget.TextView
+import androidx.recyclerview.widget.RecyclerView
 import java.time.LocalDate
 import java.time.Period
 import kotlin.collections.ArrayList
@@ -70,21 +71,27 @@ class ContactListAdapter(context: Context, resource: Int) :
         val moreButton : Button = rowView.findViewById(R.id.more_btn)
 
         contactNameTextView.text = contact.name
+        contactNameTextView.tag = position
+
         contactTimeTextView.text = getLastContactedTime(contact.lastContacted)
+        contactTimeTextView.tag = position
+
         if (contact.photo == null) {
             contactImageView.setImageResource(R.drawable.ic_person_black_128dp)
         } else {
             contactImageView.setImageBitmap(contact.photo)
         }
         contactImageView.contentDescription = context.getString(R.string.contact_photo_description, contact.name)
+        contactImageView.tag = position
 
         catchUpButton.let {
             val iconId = when(contact.contactMethod) {
                 ContactMethod.TELEPHONE -> R.drawable.ic_phone_black_24dp
                 ContactMethod.SMS -> R.drawable.ic_chat_black_24dp
                 ContactMethod.EMAIL -> R.drawable.ic_email_black_24dp
-                ContactMethod.WHATSAPP -> R.drawable.ic_chat_black_24dp // TODO: get whatsapp icon
-                ContactMethod.SIGNAL -> R.drawable.ic_chat_black_24dp // TODO: get signal icon
+                ContactMethod.WHATSAPP -> R.drawable.ic_whatsapp_icon // TODO: Get this in monochrome?
+                ContactMethod.SIGNAL -> R.drawable.ic_signal_app // TODO: Get this in monochrome?
+                ContactMethod.TELEGRAM -> R.drawable.ic_telegram_logo // TODO: Get this in monochrome?
                 else -> R.drawable.ic_phone_black_24dp
             }
             it.setCompoundDrawablesRelativeWithIntrinsicBounds(
@@ -101,10 +108,7 @@ class ContactListAdapter(context: Context, resource: Int) :
                 R.drawable.ic_more_vert_black_24dp, 0, 0, 0)
             it.tag = position
         }
-        rowView.let {
-            it.tag = position
-        }
-
+        rowView.tag = position
         return rowView
     }
 

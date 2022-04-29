@@ -8,7 +8,7 @@ enum class ContactMethod(val protocol: String, val action: String, val packageHi
     EMAIL("mailto", Intent.ACTION_SENDTO),
     WHATSAPP("smsto", Intent.ACTION_SENDTO, "com.whatsapp"),
     SIGNAL("smsto", Intent.ACTION_SENDTO, "org.thoughtcrime.securesms"),
-    // TODO: add telegram to list
+    TELEGRAM("smsto", Intent.ACTION_SENDTO, "org.telegram.messenger"),
     // TODO: add skype to list
     // TODO: split whatsapp (and others) into text and call
 }
