@@ -7,15 +7,11 @@ data class Contact (
     val id: Long,
     var name: String,
     var photo: Bitmap?,
-    var lastContacted: LocalDate?,
-    var contactMethod: ContactMethod?,
-    var address: String?) {
+    var lastContacted: LocalDate?) {
 
     companion object {
         const val ID = "id"
         const val LAST_CONTACTED = "last_contacted"
-        const val CONTACT_METHOD = "contact_method"
-        const val ADDRESS = "address"
     }
 
 }

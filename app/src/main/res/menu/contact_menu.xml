@@ -9,11 +9,6 @@
         android:title="@string/edit_contact_method"
         app:showAsAction="always" />
     <item
-        android:id="@+id/action_remove_contact"
-        android:icon="@drawable/ic_delete_black_24dp"
-        android:title="@string/remove_contact"
-        app:showAsAction="always" />
-    <item
         android:id="@+id/action_change_last_contact"
         android:icon="@drawable/ic_access_time_black_24dp"
         android:title="@string/edit_last_contact"

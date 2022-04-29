@@ -68,7 +68,6 @@ class ContactListAdapter(context: Context, resource: Int) :
         val contactTimeTextView : TextView = rowView.findViewById(R.id.last_contacted)
         val catchUpButton : Button = rowView.findViewById(R.id.catch_up_btn)
         val resetButton : Button = rowView.findViewById(R.id.reset_btn)
-        val moreButton : Button = rowView.findViewById(R.id.more_btn)
 
         contactNameTextView.text = contact.name
         contactNameTextView.tag = position
@@ -85,27 +84,13 @@ class ContactListAdapter(context: Context, resource: Int) :
         contactImageView.tag = position
 
         catchUpButton.let {
-            val iconId = when(contact.contactMethod) {
-                ContactMethod.TELEPHONE -> R.drawable.ic_phone_black_24dp
-                ContactMethod.SMS -> R.drawable.ic_chat_black_24dp
-                ContactMethod.EMAIL -> R.drawable.ic_email_black_24dp
-                ContactMethod.WHATSAPP -> R.drawable.ic_whatsapp_icon // TODO: Get this in monochrome?
-                ContactMethod.SIGNAL -> R.drawable.ic_signal_app // TODO: Get this in monochrome?
-                ContactMethod.TELEGRAM -> R.drawable.ic_telegram_logo // TODO: Get this in monochrome?
-                else -> R.drawable.ic_phone_black_24dp
-            }
             it.setCompoundDrawablesRelativeWithIntrinsicBounds(
-                iconId, 0, 0, 0)
+                R.drawable.ic_baseline_beenhere_24, 0, 0, 0)
             it.tag = position
         }
         resetButton.let {
             it.setCompoundDrawablesRelativeWithIntrinsicBounds(
                 R.drawable.ic_update_black_24dp, 0, 0, 0)
-            it.tag = position
-        }
-        moreButton.let {
-            it.setCompoundDrawablesRelativeWithIntrinsicBounds(
-                R.drawable.ic_more_vert_black_24dp, 0, 0, 0)
             it.tag = position
         }
         rowView.tag = position

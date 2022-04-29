@@ -3,21 +3,19 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
-    <item
-        android:id="@+id/action_add"
-        android:icon="@drawable/ic_person_add_white_24dp"
-        android:orderInCategory="100"
-        android:title="@string/add_contact"
-        app:showAsAction="always" />
 
     <item
         android:id="@+id/action_set_group"
+        android:icon="@drawable/ic_baseline_group_24"
         android:orderInCategory="100"
         android:title="@string/set_group"
-        app:showAsAction="never" />
+        android:onClick="setContactGroup"
+        app:showAsAction="ifRoom" />
     <item
         android:id="@+id/action_about"
+        android:icon="@drawable/ic_baseline_help_24"
         android:orderInCategory="100"
         android:title="@string/about"
-        app:showAsAction="never" />
+        android:onClick="showAboutInfo"
+        app:showAsAction="ifRoom" />
 </menu>

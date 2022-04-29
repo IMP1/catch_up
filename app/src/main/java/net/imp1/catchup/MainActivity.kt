@@ -1,12 +1,12 @@
 package net.imp1.catchup
 
 import android.Manifest
+import android.app.DatePickerDialog
 import android.content.ContentUris
 import android.net.Uri
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.provider.ContactsContract
-import android.util.Log
 import android.view.View
 import android.widget.*
 import org.json.JSONArray
@@ -17,7 +17,6 @@ import java.util.*
 import kotlin.collections.ArrayList
 import android.content.pm.PackageManager
 import android.content.Intent
-import android.content.pm.ResolveInfo
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.view.Menu
@@ -34,10 +33,13 @@ const val MY_PERMISSIONS_REQUEST_READ_CONTACTS = 1
 val DATE_FORMATTER: DateTimeFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd", Locale.UK)
 
 class MainActivity :
-    AppCompatActivity() {
+    AppCompatActivity(),
+    DatePickerDialog.OnDateSetListener {
 
     private lateinit var contactAdapter : ContactListAdapter
     private lateinit var contacts : ArrayList<Contact>
+
+    private var contactToReset : Contact? = null
 
     var catchupGroup = "catch-up"
 
@@ -91,7 +93,7 @@ class MainActivity :
         try {
             loadCatchUpContactDetails()
         } catch (e : FileNotFoundException ) {
-            setupDefaultCatchUpContactDetails()
+            e.printStackTrace()
         }
 
         contacts.sortBy {
@@ -104,34 +106,6 @@ class MainActivity :
         list.adapter = contactAdapter
         contactAdapter.notifyDataSetChanged()
 
-        // TODO: Debugging to find permissions relevant to communications apps
-        val pm = packageManager
-        val packages = pm.getInstalledApplications(PackageManager.GET_META_DATA)
-        val interestingPermissions = arrayOf(
-            "android.permission.CALL_PHONE",
-            "android.permission.SEND_SMS",
-            "android.permission.WRITE_SMS"
-        )
-
-        for (applicationInfo in packages) {
-            if (applicationInfo.name == null) { continue }
-            try {
-                val packageInfo =
-                    pm.getPackageInfo(applicationInfo.packageName, PackageManager.GET_PERMISSIONS)
-                //Get Permissions
-                val relevantPermissions = packageInfo.requestedPermissions?.filter {
-                    it in interestingPermissions
-                } ?: ArrayList<String>()
-                if (relevantPermissions.isNotEmpty()){
-                    Log.d("test","App: " + applicationInfo.name + " Package: " + applicationInfo.packageName)
-                    for (p in relevantPermissions) {
-                        Log.d(applicationInfo.name, p)
-                    }
-                }
-            } catch (e: Exception) {
-                e.printStackTrace()
-            }
-        }
     }
 
     override fun onStop() {
@@ -147,18 +121,8 @@ class MainActivity :
             contact.lastContacted?.let {
                 lastContactString = it.format(DATE_FORMATTER)
             }
-            var contactMethodString : String? = null
-            contact.contactMethod?.let {
-                contactMethodString = it.name
-            }
-            var contactAddressString : String? = null
-            contact.address?.let {
-                contactAddressString = it
-            }
             obj.put(Contact.ID, contact.id)
             obj.put(Contact.LAST_CONTACTED, lastContactString)
-            obj.put(Contact.CONTACT_METHOD, contactMethodString)
-            obj.put(Contact.ADDRESS, contactAddressString)
             list.put(obj)
         }
         openFileOutput(CONTACT_INFO_FILENAME, MODE_PRIVATE)?.use {
@@ -189,40 +153,7 @@ class MainActivity :
                     Toast.makeText(applicationContext, e.message, Toast.LENGTH_LONG).show()
                 }
             }
-            if (item.has(Contact.CONTACT_METHOD)) {
-                val contactMethodString = item.getString(Contact.CONTACT_METHOD)
-                contact.contactMethod = ContactMethod.valueOf(contactMethodString)
-            }
-            if (item.has(Contact.ADDRESS)) {
-                contact.address = item.getString(Contact.ADDRESS)
-            }
         }
-    }
-
-    private fun setupDefaultCatchUpContactDetails() {
-        val uri = ContactsContract.CommonDataKinds.Phone.CONTENT_URI
-        val projection = null
-        val selection = ContactsContract.CommonDataKinds.Phone.CONTACT_ID + " = ?"
-        contacts.forEach { contact ->
-            val args : Array<String> = arrayOf(contact.id.toString())
-            contentResolver.query(uri, projection, selection, args, null)?.use { cursor ->
-                if (cursor.moveToFirst()) {
-                    val number = cursor.getString(cursor.getColumnIndex(ContactsContract.CommonDataKinds.Phone.NUMBER))
-                    contact.address = number
-                    contact.contactMethod = ContactMethod.TELEPHONE
-                }
-            }
-        }
-    }
-
-    fun moreActions(view: View) {
-        val position = view.tag as Int
-        val listener = ContactMoreActionsListener(contacts[position], this)
-        val popup = PopupMenu(this, view)
-        val inflater = popup.menuInflater
-        popup.setOnMenuItemClickListener(listener)
-        inflater.inflate(R.menu.contact_menu, popup.menu)
-        popup.show()
     }
 
     fun viewContact(view: View) {
@@ -241,7 +172,7 @@ class MainActivity :
         }
     }
 
-    fun refreshList() {
+    private fun refreshList() {
         contacts.sortBy {
             it.lastContacted ?: LocalDate.MIN
         }
@@ -250,12 +181,28 @@ class MainActivity :
 
     fun reset(view : View) {
         val position = view.tag as Int
-        val contact = contactAdapter.getItem(position)
-        contact?.let { con ->
-            con.lastContacted = LocalDate.now()
-            contactAdapter.notifyDataSetChanged()
+        contactToReset = contacts[position]
+        val now = Calendar.getInstance()
+        val year = now.get(Calendar.YEAR)
+        val month = now.get(Calendar.MONTH)
+        val day = now.get(Calendar.DAY_OF_MONTH)
+        val dateFragment = DatePickerDialog(this, this, year, month, day)
+        dateFragment.datePicker.maxDate = now.timeInMillis
+        dateFragment.show()
+    }
+
+    override fun onDateSet(view: DatePicker?, year: Int, month: Int, dayOfMonth: Int) {
+        // onDateSet returns a month from 0-11, but LocalDate assumes a month 1-12
+        // How ridiculous is that? But that's the reason for this silly conversion
+        val datePickerToLocalDateMonthConversion = 1
+        val date = LocalDate.of(year,
+            month + datePickerToLocalDateMonthConversion,
+            dayOfMonth)
+        contactToReset?.let {
+            it.lastContacted = date
             refreshList()
         }
+        contactToReset = null
     }
 
     fun catchUp(view : View) {
@@ -264,31 +211,7 @@ class MainActivity :
         contact?.let { con ->
             con.lastContacted = LocalDate.now()
             contactAdapter.notifyDataSetChanged()
-            val protocol = con.contactMethod?.protocol ?: "tel"
-            val address = con.address!!
-            val uri = Uri.parse("$protocol:$address")
-            val action = con.contactMethod?.action ?: Intent.ACTION_SEND
-
-            val intent = Intent(action, uri)
-
-            con.contactMethod?.packageHint?.let {
-                intent.setPackage(it)
-            }
-
-            val activities: List<ResolveInfo> = packageManager.queryIntentActivities(intent, 0)
-            val isIntentSafe: Boolean = activities.isNotEmpty()
-
-            if (isIntentSafe) {
-                startActivity(intent)
-                refreshList()
-            } else {
-                val name = con.name
-                val message = "Couldn't find an app to use to catch up with $name"
-                Toast.makeText(applicationContext, message, Toast.LENGTH_LONG).show()
-                Log.e("contact", con.name)
-                Log.e("method", con.contactMethod.toString())
-                Log.e("uri", uri.toString())
-            }
+            refreshList()
         }
     }
 
@@ -359,9 +282,7 @@ class MainActivity :
                     } catch (e: IOException) {
                     }
                     val lastContact: LocalDate? = null
-                    val contactMethod: ContactMethod? = null
-                    val address: String? = null
-                    val contact = Contact(id, name, photo, lastContact, contactMethod, address)
+                    val contact = Contact(id, name, photo, lastContact)
                     contactDetails.add(contact)
                 } while (cursor.moveToNext())
             }
@@ -369,5 +290,12 @@ class MainActivity :
         return contactDetails
     }
 
+    fun setContactGroup(item: MenuItem) {
+
+    }
+
+    fun showAboutInfo(item: MenuItem) {
+        // TODO: Add About Info Page?
+    }
 
 }
