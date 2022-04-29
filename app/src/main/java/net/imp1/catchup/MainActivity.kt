@@ -80,6 +80,7 @@ class MainActivity :
     }
 
     private fun setup() {
+        // TODO: Load contact group from somewhere
         contacts = getContactDetails()
 
         // <remove>
@@ -128,6 +129,7 @@ class MainActivity :
         openFileOutput(CONTACT_INFO_FILENAME, MODE_PRIVATE)?.use {
             it.write(list.toString(4).toByteArray(Charsets.UTF_8))
         }
+        // TODO: Save contact group somewhere
     }
 
     @Throws(FileNotFoundException::class)
